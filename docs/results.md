@@ -1,6 +1,8 @@
 # Results
 
-All numbers are for one model, one benchmark split, and a single run of each configuration. They are from a laptop GPU that was thermally throttled, so **no speed or energy figure is reported**; accuracy figures are not affected by throttling.
+The five-configuration quantisation ladder, with speed and energy, is in [ladder.md](ladder.md). This page covers the first model (Qwen2.5-7B Q4_K_M) and the prompt comparison.
+
+All numbers are for one model, one benchmark split, and a single run of each configuration. The evaluation runs on this page were on a thermally throttled laptop GPU, so **no speed or energy figure is quoted from them**; accuracy figures are not affected by throttling. Properly gated speed and energy measurements are in [ladder.md](ladder.md).
 
 ## Setup
 
@@ -39,11 +41,11 @@ Numbers before the parser fix (prompt v1, lenient parser), kept for transparency
 
 Repeating the same run changed the answer to about 1 question in 200 (false refusal 16% vs. 17%), even at temperature 0 with a fixed seed. Treat a one-question difference as noise.
 
-## Why there is no speed or energy figure
+## Why these runs report no speed or energy
 
 A probe sending the same request repeatedly (`scripts/throttle_probe.py`) showed the GPU at 89-94 C with the SM clock falling from a 1785 MHz maximum to 210 MHz, with software-thermal, hardware-thermal and hardware-slowdown throttle reasons set. Decode speed fell from about 53 tokens/s early in the evaluation run to about 15 tokens/s later, and GPU power from 114 W to 72 W. Speed and energy measured under those conditions describe the throttle, not the model. `run_eval.py` now logs the GPU clock, temperature and throttle reasons during every run and marks the timing `NOT TRUSTWORTHY` when the median clock is below 90% of maximum or any power or thermal throttle was seen; all runs so far carry that flag.
 
-Before the quantisation ladder, a timing protocol is needed: cool the GPU below a set temperature before each timing block, time short bursts, interleave configurations across rounds, and report the clock and temperature beside each number. Sustained rate under throttling is also what a fanless edge device would deliver, so it is worth reporting separately from the cool burst rate.
+The ladder therefore uses a different protocol (cool the GPU before each short burst, interleave configurations across rounds, log clock, temperature and throttle reasons beside each number); see [ladder.md](ladder.md). Sustained speed under throttling is also what a fanless edge device would deliver, so it remains worth reporting separately from the cooled-burst speed.
 
 ## Limitations
 

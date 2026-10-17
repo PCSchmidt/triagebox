@@ -27,7 +27,15 @@ from pathlib import Path
 from triagebox.dataset import load_corpus, load_items
 from triagebox.llamacpp import LlamaServer, TimedLLM
 from triagebox.pipeline import triage
-from triagebox.power import THROTTLE_BITS, GpuPower, timing_trustworthy, wait_for_cool
+from triagebox.power import (
+    HARD_THROTTLE_BITS,
+    POWER_CAP_BIT,
+    GpuPower,
+    energy_joules,
+    timing_steady,
+    timing_trustworthy,
+    wait_for_cool,
+)
 from triagebox.rag import Bm25Index, chunk_text
 from triagebox.serverproc import ServerProc
 
@@ -97,13 +105,14 @@ def burst(cfg: Config, rnd: int, index: Bm25Index, questions: list, args: argpar
                 triage(q.question, index, llm, k=4, prompt_version=PROMPT_VERSION)
             t1 = time.perf_counter()
             state = power.state(t0, t1)
+            burst_j = energy_joules(power.samples, t0, t1)
             joules, watts = [], []
             for start, end, timing in llm.timings:
                 w = power.mean_watts(start, end)
                 if w is not None:
                     watts.append(w)
                     joules.append(w * timing.total_ms / 1000.0)
-    ok = timing_trustworthy(state)
+    steady = timing_steady(state)
     return {
         "config": cfg.name,
         "round": rnd,
@@ -115,12 +124,17 @@ def burst(cfg: Config, rnd: int, index: Bm25Index, questions: list, args: argpar
         "tokens_per_s_median": med([t.tokens_per_s for _, _, t in llm.timings if t.n_tokens > 1]),
         "tokens_median": med([t.n_tokens for _, _, t in llm.timings]),
         "gpu_watts_median": med(watts),
-        "joules_per_answer_median": med(joules),
+        "joules_per_answer_median": med(joules),  # per-request estimate; noisy for sub-100 ms answers
+        "joules_per_answer_burst": None if burst_j is None else burst_j / len(questions),
+        "burst_seconds": t1 - t0,
         "median_sm_mhz": state.median_sm_mhz,
         "clock_fraction": state.clock_fraction,
         "max_temp_c": state.max_temp_c,
-        "throttled": bool(state.throttle_reasons_seen & THROTTLE_BITS),
-        "trustworthy": ok and cool.reached,
+        "throttle_mask": hex(state.throttle_reasons_seen),
+        "power_capped": bool(state.throttle_reasons_seen & POWER_CAP_BIT),
+        "hard_throttle": bool(state.throttle_reasons_seen & HARD_THROTTLE_BITS),
+        "unconstrained_boost": timing_trustworthy(state),
+        "trustworthy": steady and cool.reached,
     }
 
 
@@ -137,8 +151,8 @@ def timing(args: argparse.Namespace) -> None:
             bursts.append(b)
             print(
                 f"round {rnd} {cfg.name:22s} start {b['start_temp_c']}C  clock {100 * (b['clock_fraction'] or 0):3.0f}%  "
-                f"max {b['max_temp_c']}C  {b['tokens_per_s_median'] or 0:6.1f} tok/s  "
-                f"{'ACCEPTED' if b['trustworthy'] else 'rejected (throttled or not cooled)'}",
+                f"max {b['max_temp_c']}C  mask {b['throttle_mask']}  {b['tokens_per_s_median'] or 0:6.1f} tok/s  "
+                f"{'ACCEPTED' if b['trustworthy'] else 'rejected (hard throttle, too hot, or not cooled)'}",
                 flush=True,
             )
             out.write_text(json.dumps({"bursts": bursts, "summary": summarize(bursts), "meta": meta(args)}, indent=2), encoding="utf-8")
@@ -159,7 +173,10 @@ def summarize(bursts: list[dict]) -> dict:
             "accepted": len(ok),
             "tokens_per_s": stat("tokens_per_s_median"),
             "ttft_ms": stat("ttft_ms_median"),
-            "joules_per_answer": stat("joules_per_answer_median"),
+            "joules_per_answer": stat("joules_per_answer_burst"),
+            "tokens_per_s_spread": (max(b["tokens_per_s_median"] for b in ok) / min(b["tokens_per_s_median"] for b in ok)) if ok else None,
+            "power_capped_bursts": sum(b["power_capped"] for b in ok),
+            "median_clock_fraction": statistics.median(b["clock_fraction"] for b in ok) if ok else None,
             "gpu_watts": stat("gpu_watts_median"),
         }
     return res
@@ -185,8 +202,10 @@ def meta(args: argparse.Namespace) -> dict:
         "burst_requests": args.burst,
         "cool_target_c": args.cool_c,
         "prompt_version": PROMPT_VERSION,
-        "rule": "a burst counts only if the GPU cooled to the target before it, its median SM clock was >= 90% of maximum, "
-        "and no power or thermal throttle reason was seen; energy is GPU board power x duration, not system power",
+        "rule": "a burst counts only if the GPU cooled to the target before it, reported no thermal, hardware-slowdown or "
+        "power-brake throttle reason, and stayed at or below 85 C. A software power cap (operation at the board's rated "
+        "power limit) is tolerated and recorded, so numbers describe this board at its power limit, not unconstrained boost. "
+        "Energy is GPU board power integrated over the whole burst divided by the number of answers (includes small gaps between requests); it is GPU board power, not system power.",
         "llama_cpp": "b11700, CUDA 12.4, all layers on GPU, context 4096, temperature 0",
     }
 

@@ -45,7 +45,10 @@ Model family at two or more sizes; precision FP16, INT8, INT4 (INT8 and INT4 by 
 - Time to first token and decode rate from a streamed generation; energy per answer as measured average board power × duration, never an assumed power figure.
 - Each configuration is measured in several **interleaved rounds** on an otherwise idle machine, and compared within a round. A throttling GPU drifts during a run, and a single reading once misled a result in a sibling project.
 - Report medians with ranges, the number of rounds, the hardware, the software versions and the date.
-- **Timing validity rule.** GPU clock, temperature and throttle reasons are logged during every run. Speed and energy are reported only if the median SM clock stayed at or above 90% of its maximum and no power or thermal throttle reason was seen; otherwise the run is marked untrustworthy and its speed and energy figures are not quoted. On the development laptop a 7B model sustained for a few minutes drove the GPU to 89-97 C and a 210 MHz clock, so cooled bursts and sustained operation are reported separately.
+- **Timing validity rules.** GPU clock, temperature and throttle reasons are logged during every run. Two tiers:
+  - *Unconstrained boost* (strict): median SM clock at or above 90% of its maximum and no power or thermal throttle reason. Long evaluation runs on the development laptop never met this; they are flagged and their speed and energy are not quoted (a sustained 7B run drove the GPU to 89-97 C and a 210 MHz clock).
+  - *Steady* (used for the reported ladder): the GPU was cooled to a set temperature before a short burst, showed no thermal, hardware-slowdown or power-brake throttle reason, and stayed at or below 85 C. A software power cap, meaning operation at the board's rated power limit, is tolerated and recorded, so such figures describe the board at its power limit, not unconstrained boost.
+  The steady rule was introduced after the strict rule rejected every cooled burst because of the power cap; it was fixed before the reported runs, and the first-pass data are kept. A steady burst is trusted only if repeated rounds agree (here, within 1-5% on speed).
 
 ## Reporting
 

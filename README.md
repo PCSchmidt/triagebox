@@ -4,7 +4,7 @@
 
 An air-gapped box that answers questions about a set of documents using a small, quantised language model, and **refuses to answer without citing the passages it was shown**. The question this project exists to answer is how much quality each step down in model size and precision costs, per joule, on edge hardware.
 
-**Status: first model result in; no quantisation comparison, speed or energy numbers yet.** The retrieval, citation policy, evaluation metrics, signed sync bundles, one-way export, audit log and boot-time integrity checks are implemented and unit-tested on a laptop (pure Python plus `cryptography` for signatures). A SQuAD 2.0 benchmark subset (dev and test splits, half unanswerable) is prepared (see [data](docs/data.md)), and one model, Qwen2.5-7B-Instruct at Q4_K_M, has been run through the full pipeline on the dev split (below). Nothing has run on an edge device, and the speed and energy figures are withheld because the laptop GPU was thermally throttled. See the [roadmap](docs/roadmap.md).
+**Status: quantisation ladder measured on a desktop-class laptop GPU; nothing yet on an edge device, and the faithfulness judge and the locked test split are still to come.** The retrieval, citation policy, evaluation metrics, signed sync bundles, one-way export, audit log and boot-time integrity checks are implemented and unit-tested (pure Python plus `cryptography` for signatures). A SQuAD 2.0 benchmark subset (dev and test splits, half unanswerable) is prepared (see [data](docs/data.md)), and five configurations of Qwen2.5-Instruct (1.5B at FP16, Q8_0, Q4_K_M; 7B at Q8_0, Q4_K_M) have been run through the full pipeline on the dev split, with thermally gated speed and energy measurements (see [ladder](docs/ladder.md)). See the [roadmap](docs/roadmap.md).
 
 Part of [physical-ai-portfolio](https://github.com/PCSchmidt/physical-ai-portfolio). It reuses the measurement discipline from [Sentinel Node](https://github.com/PCSchmidt/sentinel-node).
 
@@ -29,6 +29,25 @@ Disconnected, power-limited systems cannot call a cloud model, and a small model
 | `audit` | Hash-chained log of every prompt and answer | Edit, reorder and removal detected |
 | `integrity` | Boot-time hash check of model and index files; fails closed | Modified and missing files |
 
+## Quantisation ladder: quality versus energy
+
+![Quality versus GPU energy per answer: accuracy and hallucination against joules per answer for five configurations](docs/ladder-quality-vs-energy.svg)
+
+Five configurations on the same 200 dev questions (100 answerable, 100 unanswerable), prompt, and retrieval; system-level numbers (after the citation policy). Energy is GPU board energy per answer from cooled, short, interleaved bursts on an RTX A4500 laptop GPU running at its power limit; it is not system power and not an edge-device figure.
+
+| Model | Precision | Accuracy | Hallucination | False refusal | Decode tokens/s | GPU energy per answer (J) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1.5B | FP16 | 49% | 76% | 31% | 104 | 21.1 |
+| 1.5B | Q8_0 | 49% | 72% | 32% | 163 | 17.4 |
+| 1.5B | Q4_K_M | 28% | 33% | 61% | 192 | 12.2 |
+| 7B | Q8_0 | 74% | 30% | 15% | 48 | 63.7 |
+| 7B | Q4_K_M | 74% | 31% | 15% | 59 | 56.1 |
+
+- **Model size dominates precision.** Both 7B models score the same (74% accuracy, about 30% hallucination); the 1.5B models invent an answer to 90-92% of unanswerable questions at the model level. Their low system-level hallucination at Q4_K_M is mostly the citation policy rejecting broken answers, which is why their false refusal is so high.
+- **At 7B, Q4_K_M costs nothing measurable in quality** relative to Q8_0 and is about 24% faster and about 12% cheaper per answer. It is the best configuration tested here.
+- **At 1.5B only Q4_K_M hurts**: citation validity falls from about 77% to 47%.
+- **Caveats:** one run per configuration, 100 questions per kind (about ±9 points at a 30% rate), the prompt was tuned on the 7B Q4_K_M model, and the energy ordering mostly mirrors latency because the GPU runs near its power limit. Speed repeated within 1-5% across rounds; energy is noisier. The test split has not been used. Details, method history and limits in [docs/ladder.md](docs/ladder.md).
+
 ## First result: Qwen2.5-7B-Instruct (Q4_K_M), SQuAD 2.0 dev subset
 
 100 answerable and 100 unanswerable questions, BM25 top-4 retrieval (the gold paragraph is retrieved for 91% of the answerable ones, which caps accuracy), temperature 0, llama.cpp on an RTX A4500 Laptop GPU. "Hallucination" is the share of unanswerable questions that got an answer instead of a refusal. Full write-up, definitions and caveats in [docs/results.md](docs/results.md).
@@ -44,7 +63,7 @@ What it shows, and what it doesn't:
 - **The honest hallucination figure is about 31%.** The v1 figure of 23% looked better only because many replies were unusable. About a third of near-miss unanswerable questions get an invented answer from this model at this precision.
 - **The structural citation check does not stop that.** With well-formed replies every citation is valid, so the policy rejects nothing; a real, retrieved paragraph can be cited for an invented answer. Judging whether the cited passage supports the answer is the next measurement.
 - **Caveats:** one model, one quantisation, one run; the prompt was chosen on the dev split and the test split is untouched; with 100 questions per kind a rate near 30% has roughly ±9 points of uncertainty, so the 23%-to-31% change is not distinguishable from noise while the accuracy gain is not. Repeating a run changed about 1 question in 200.
-- **No speed or energy numbers on purpose.** The GPU hit 89-97 C and its clock fell from 1785 MHz to as low as 210 MHz during sustained generation, so any speed or power figure from these runs would describe the throttle, not the model. The runner now records clock, temperature and throttle reasons and flags such runs as untrustworthy.
+- **Speed and energy are measured separately, on purpose.** The GPU hit 89-97 C and its clock fell from 1785 MHz to as low as 210 MHz during sustained generation, so any speed or power figure from these long runs would describe the throttle, not the model. The runner records clock, temperature and throttle reasons and flags such runs; timing comes from cooled, short bursts (see the ladder above).
 
 ## What the checks do and do not show
 
@@ -55,11 +74,10 @@ What it shows, and what it doesn't:
 
 ## Planned measurements (not yet done)
 
-1. A thermally controlled timing protocol (cool-down gating, short bursts, interleaved rounds), then for each model size and precision: tokens per second, time to first token and joules per answer.
-2. The quantisation ladder: 1.5B at FP16, Q8_0 and Q4_K_M; 7B at Q8_0 and Q4_K_M (7B FP16 does not fit a 16 GB card with a KV cache), each scored on accuracy, hallucination and citation validity.
-3. A judge model for citation faithfulness, with a hand-checked sample and reported agreement.
-4. An ISR-flavoured evaluation set over public documents, to follow the SQuAD 2.0 benchmark ([protocol](docs/eval-protocol.md)), and the final numbers on the locked test split.
-5. One quality-versus-joules Pareto chart, and the same on a Jetson Orin Nano once available.
+1. A judge model for citation faithfulness (does the cited passage support the answer?), with a hand-checked sample and reported agreement. This addresses the main failure the ladder exposed.
+2. A prompt tuned for the small models, since the current prompt was tuned on the 7B model, and repeated runs to put error bars on the ladder.
+3. The final numbers on the locked test split, and an ISR-flavoured evaluation set over public documents ([protocol](docs/eval-protocol.md)).
+4. The same ladder on a Jetson Orin Nano once available, where energy per answer will not simply track latency.
 
 ## Run the tests
 

@@ -177,3 +177,46 @@ def wait_for_cool(
         if clock() - start >= timeout_s:
             return CoolResult(False, temp, clock() - start)
         sleep(poll_s)
+
+
+# Throttle reasons split by what they mean for repeatable measurement.
+# A software power cap at the board's rated limit is normal steady-state behaviour
+# under heavy load. Thermal limits, hardware slowdown and the power brake are
+# unstable conditions that make speed drift during a run.
+POWER_CAP_BIT = 0x04
+HARD_THROTTLE_BITS = 0x08 | 0x20 | 0x40 | 0x80
+
+
+def timing_steady(state: GpuState, max_temp_c: int = 85) -> bool:
+    """True if the GPU showed no thermal, hardware-slowdown or power-brake throttling.
+
+    Looser than ``timing_trustworthy``: it accepts operation at the power limit
+    (clock below the unconstrained maximum), so measurements describe the board at
+    its rated power, not at unconstrained boost. Whether such measurements repeat
+    must still be checked across rounds.
+    """
+    if state.n_samples == 0 or state.max_temp_c is None:
+        return False
+    return not (state.throttle_reasons_seen & HARD_THROTTLE_BITS) and state.max_temp_c <= max_temp_c
+
+
+def energy_joules(samples: list[PowerSample], t0: float, t1: float) -> float | None:
+    """Energy (J) over ``[t0, t1]`` by holding each reading until the next one.
+
+    Integrating over a whole burst is far less noisy than averaging the one or two
+    samples that fall inside a short request. Returns ``None`` if no reading is at
+    or before ``t1``. The reading in force at ``t0`` is the last one at or before it
+    (or the first reading, if the window starts before any sample).
+    """
+    pts = sorted((s for s in samples if s.t <= t1), key=lambda s: s.t)
+    if not pts or t1 <= t0:
+        return None
+    total = 0.0
+    for i, s in enumerate(pts):
+        start = max(s.t, t0)
+        end = min(pts[i + 1].t if i + 1 < len(pts) else t1, t1)
+        if i == 0 and s.t > t0:
+            start = t0  # window starts before the first reading: hold it backwards
+        if end > start:
+            total += s.watts * (end - start)
+    return total

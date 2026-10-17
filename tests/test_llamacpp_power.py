@@ -157,3 +157,30 @@ def test_wait_for_cool_gives_up_at_the_timeout_and_treats_failed_reads_as_hot():
     assert not r.reached and r.temp_c == 85 and r.waited_s >= 20
     r = wait_for_cool(60, timeout_s=10, poll_s=5, read_temp=lambda: None, sleep=sleep, clock=lambda: now[0])
     assert not r.reached and r.temp_c is None
+
+
+def test_timing_steady_tolerates_a_power_cap_but_not_thermal_throttling():
+    from triagebox.power import timing_steady
+
+    capped = state_between([state(1100, mask=0x4, temp=72, t=1.0), state(1150, mask=0x5, temp=73, t=2.0)], 0.0, 3.0)
+    assert timing_steady(capped) and not timing_trustworthy(capped)
+    thermal = state_between([state(1100, mask=0x24, temp=72, t=1.0)], 0.0, 2.0)
+    assert not timing_steady(thermal)
+    brake = state_between([state(1700, mask=0x80, temp=60, t=1.0)], 0.0, 2.0)
+    assert not timing_steady(brake)
+    hot = state_between([state(1700, mask=0x1, temp=90, t=1.0)], 0.0, 2.0)
+    assert not timing_steady(hot)
+    assert not timing_steady(state_between([], 0.0, 1.0))
+
+
+def test_energy_joules_holds_each_reading_until_the_next():
+    from triagebox.power import energy_joules
+
+    s = [PowerSample(0.0, 100.0), PowerSample(1.0, 200.0), PowerSample(2.0, 100.0)]
+    # [0,1) at 100 W, [1,2) at 200 W, [2,3) at 100 W (last reading held to the end)
+    assert energy_joules(s, 0.0, 3.0) == pytest.approx(100 + 200 + 100)
+    assert energy_joules(s, 0.5, 1.5) == pytest.approx(50 + 100)  # clipped to the window
+    assert energy_joules(s, 5.0, 6.0) == pytest.approx(100.0)  # last reading carried forward
+    assert energy_joules([PowerSample(2.0, 80.0)], 1.0, 3.0) == pytest.approx(160.0)  # before first reading
+    assert energy_joules([], 0.0, 1.0) is None
+    assert energy_joules(s, 1.0, 1.0) is None
