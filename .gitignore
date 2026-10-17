@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.env
+*.gguf
+*.safetensors
+*.bin
+*.pem
+*.key
+models/
+data/
+runs/
