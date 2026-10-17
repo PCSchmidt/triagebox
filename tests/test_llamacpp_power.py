@@ -130,3 +130,30 @@ def test_low_clock_or_thermal_throttle_makes_timing_untrustworthy():
 def test_no_samples_is_untrustworthy():
     assert not timing_trustworthy(state_between([], 0.0, 1.0))
     assert not timing_trustworthy(state_between([state(1785, t=9.0)], 0.0, 1.0))
+
+
+def test_wait_for_cool_returns_when_the_target_is_reached():
+    from triagebox.power import wait_for_cool
+
+    temps = iter([88, 80, 70, 60, 50])
+    now = [0.0]
+
+    def sleep(s):
+        now[0] += s
+
+    r = wait_for_cool(60, timeout_s=100, poll_s=5, read_temp=lambda: next(temps), sleep=sleep, clock=lambda: now[0])
+    assert r.reached and r.temp_c == 60 and r.waited_s == 15.0
+
+
+def test_wait_for_cool_gives_up_at_the_timeout_and_treats_failed_reads_as_hot():
+    from triagebox.power import wait_for_cool
+
+    now = [0.0]
+
+    def sleep(s):
+        now[0] += s
+
+    r = wait_for_cool(60, timeout_s=20, poll_s=5, read_temp=lambda: 85, sleep=sleep, clock=lambda: now[0])
+    assert not r.reached and r.temp_c == 85 and r.waited_s >= 20
+    r = wait_for_cool(60, timeout_s=10, poll_s=5, read_temp=lambda: None, sleep=sleep, clock=lambda: now[0])
+    assert not r.reached and r.temp_c is None

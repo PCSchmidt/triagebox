@@ -132,3 +132,48 @@ class GpuPower:
 
     def state(self, t0: float, t1: float) -> GpuState:
         return state_between(self.samples, t0, t1)
+
+
+def gpu_temp_c(gpu_index: int = 0) -> int | None:
+    """Current GPU temperature in Celsius from ``nvidia-smi``, or ``None`` if unavailable."""
+    try:
+        out = subprocess.run(
+            ["nvidia-smi", f"--id={gpu_index}", "--query-gpu=temperature.gpu", "--format=csv,noheader,nounits"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+        ).stdout.strip()
+        return int(out)
+    except (OSError, ValueError, subprocess.TimeoutExpired):
+        return None
+
+
+@dataclass(frozen=True)
+class CoolResult:
+    reached: bool  # temperature fell to the target before the timeout
+    temp_c: int | None  # last reading
+    waited_s: float
+
+
+def wait_for_cool(
+    target_c: int,
+    timeout_s: float = 900.0,
+    poll_s: float = 5.0,
+    read_temp=gpu_temp_c,
+    sleep=time.sleep,
+    clock=time.monotonic,
+) -> CoolResult:
+    """Block until the GPU is at or below ``target_c`` (or ``timeout_s`` passes).
+
+    Used before each timing burst so every measurement starts from a similar
+    thermal state. A failed temperature read counts as "not cool".
+    """
+    start = clock()
+    temp = None
+    while True:
+        temp = read_temp()
+        if temp is not None and temp <= target_c:
+            return CoolResult(True, temp, clock() - start)
+        if clock() - start >= timeout_s:
+            return CoolResult(False, temp, clock() - start)
+        sleep(poll_s)
