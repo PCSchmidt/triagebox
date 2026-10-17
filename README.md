@@ -74,7 +74,7 @@ What it shows, and what it doesn't:
 
 ## Planned measurements (not yet done)
 
-1. A grounding check as a pipeline policy (reject answers whose cited passages lack the answer), a second labeller, and a judge from another model family. A first judge study is in [faithfulness](docs/faithfulness.md).
+1. A second labeller, a judge from another model family, and a better unsupported-answer detector than word overlap (the lexical grounding policy removed only 2 of 14 such answers; see [faithfulness](docs/faithfulness.md)).
 2. A prompt tuned for the small models, since the current prompt was tuned on the 7B model, and repeated runs to put error bars on the ladder.
 3. The final numbers on the locked test split, and an ISR-flavoured evaluation set over public documents ([protocol](docs/eval-protocol.md)).
 4. The same ladder on a Jetson Orin Nano once available, where energy per answer will not simply track latency.

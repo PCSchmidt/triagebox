@@ -73,3 +73,20 @@ def test_every_call_is_audited_and_the_log_verifies():
     assert log.entries[1]["event"]["kind"] == "refusal"
     log.entries[0]["event"]["accepted"] = False  # tamper
     assert verify_chain(log.entries) == 0
+
+
+def test_grounding_policy_rejects_an_answer_the_cited_passage_does_not_contain():
+    invented = "ANSWER: Seven tanks are near the airfield [air#0]."
+    assert run(invented).accepted  # structurally fine, so accepted without the policy
+    r = run(invented, min_support=0.8)
+    assert not r.accepted and "not found in the cited passages" in r.reason
+
+
+def test_grounding_policy_keeps_a_grounded_answer():
+    assert run("ANSWER: Three trucks near the airfield [air#0].", min_support=0.8).accepted
+
+
+def test_grounding_policy_checks_the_cited_passage_not_just_any_retrieved_one():
+    # "docked" appears only in port#0 (retrieved), but the answer cites air#0.
+    r = run("ANSWER: The ship docked [air#0].", question="Where did the cargo ship dock at the airfield port?", min_support=0.8)
+    assert not r.accepted

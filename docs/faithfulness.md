@@ -25,11 +25,33 @@ The hand labels are one labeller (me), not a random sample, and four items are g
 1. **About half of the "hallucinations" are not hallucinations.** Of the 31 answers to questions the dataset labels unanswerable, I judged **17 supported** by the cited passage and 14 not. The dataset's near-miss questions often contain a typo, a swapped detail the model reasonably ignored, or a question the passage does answer ("Duct PTT Telecom", "the third of France", "Of Poland's inhabitants in 1901"). By this reading, the unsupported-answer rate is about **14 of 100** unanswerable questions, not the 31% reported in [results.md](results.md). Both numbers are real: 31% is "answered a question the benchmark says is unanswerable"; 14% is "gave an answer its passage does not support". The second is the one that matters operationally, and the first overstates it.
 2. **Citations can be valid and wrong.** In **7 of 85** answers to answerable questions (8%) the answer matches the gold answer's wording but the gold string is *absent from the cited passage*. The model got the answer right (from the other retrieved passages, or from its own memory: it cited a passage about Warsaw for the Baltic "Singing Revolution") and cited the wrong chunk. The citation policy accepts these. A reader following the citation would not find the answer.
 
+## A grounding policy, tested offline
+
+`triage(..., min_support=t)` now optionally rejects an answer unless at least a fraction `t` of its content words appear in the passages it cites (`lexical_support`; no model involved). `scripts/grounding_policy.py` re-scores every saved dev run as if that policy had been on, so no new model runs were needed. The threshold was swept on the dev split only; results are in `results/grounding_policy_dev.json`.
+
+Qwen2.5-7B Q4_K_M, prompt v2, dev split (100 + 100 questions):
+
+| Policy | Accuracy | False refusal | Hallucination (dataset labels) | Hand-labelled unsupported answers removed (of 14) | Hand-labelled supported answers lost (of 17) |
+| --- | --- | --- | --- | --- | --- |
+| none | 74% | 14% | 31% | 0 | 0 |
+| support >= 0.5 | 69% | 23% | 28% | 2 | 1 |
+| support >= 0.7 | 67% | 25% | 28% | 2 | 1 |
+
+Qwen2.5-7B Q8_0 behaves the same (74% to 68%, hallucination 30% to 28%). The 1.5B models lose more.
+
+Reading it:
+
+- **It does what it was built for, and only that.** At 0.5, all 5 correct answers it rejects are the ones whose cited passage lacks the answer (Donald Davies, the Edict of Nantes, the Singing Revolution, the Presbyterian Church, photosynthesis). Those answers are right but unfaithful, so the "accuracy loss" is partly the policy doing its job: a reader following those citations would not find the answer. At 0.7 two more correct answers are lost (a paraphrased answer and a short phrase); those are false alarms.
+- **It barely touches the larger problem.** Of the 14 answers to unanswerable questions that the cited passage does not support, it removes 2. The other 12 reuse words from a passage that is about the right topic ("15 kilometres" for a question about a different distance), so word overlap cannot tell them apart. Detecting that needs the question and the passage compared, which is what the judge tries to do and does only 72% reliably.
+- **So it is not worth turning on as the default.** It costs 5 to 7 points of accuracy to remove 2 of 14 unsupported answers. The more useful use of the check is as a flag on the 8% of answers with wrong citations, not as a gate.
+
+Limits: one model family, one dev subset, thresholds picked after seeing the dev results (not confirmed on the test split), and the hand labels are from one labeller.
+
 ## What this changes
 
 - The headline hallucination figure should be reported alongside the supported-by-passage figure, with the caveat that the second rests on hand labels from one labeller.
 - Citation validity (100%) means "cited something retrieved", not "cited something relevant". A grounding check (the deterministic one above, or the judge) is a better acceptance test, and the deterministic one needs no model.
-- The next experiment is to run the deterministic check inside the pipeline as a policy (reject answers whose cited passages do not contain the answer string) and measure what it costs in false refusals. It only applies to short extractive answers, so it is not a general solution.
+- A lexical grounding check was tried as a pipeline policy (next section): it catches the wrong-citation answers but almost none of the unsupported ones, and costs accuracy. Detecting an unsupported-but-on-topic answer needs a comparison of question and passage, not word overlap.
 
 ## Reproducing
 
