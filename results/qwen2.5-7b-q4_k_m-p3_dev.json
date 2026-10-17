@@ -1,0 +1,50 @@
+{
+  "label": "qwen2.5-7b-q4_k_m-p3",
+  "split": "dev",
+  "n_answerable": 100,
+  "n_unanswerable": 100,
+  "k": 4,
+  "prompt_version": 3,
+  "retrieval_ceiling_answerable": 0.91,
+  "model_level": {
+    "n_answerable": 100,
+    "n_unanswerable": 100,
+    "accuracy": 0.71,
+    "false_refusal_rate": 0.15,
+    "hallucination_rate": 0.36,
+    "citation_validity": 0.9666666666666667,
+    "citation_validity_doc_level": 1.0,
+    "gold_citation_recall": 0.9047619047619048,
+    "malformed_rate": 0.005
+  },
+  "system_level": {
+    "n_answerable": 100,
+    "n_unanswerable": 100,
+    "accuracy": 0.69,
+    "false_refusal_rate": 0.18,
+    "hallucination_rate": 0.34,
+    "citation_validity": 1.0,
+    "citation_validity_doc_level": 1.0,
+    "gold_citation_recall": 0.9024390243902439,
+    "malformed_rate": 0.0
+  },
+  "gpu_state_during_run": null,
+  "timing": {
+    "ttft_ms_median": 528.7647499644663,
+    "tokens_per_s_median": 35.14641368367623,
+    "total_ms_median": 849.857900000643,
+    "tokens_median": 15.0,
+    "joules_per_answer_median": null,
+    "gpu_watts_median": null
+  },
+  "meta": {
+    "date_utc": "2026-10-17T15:25:22+00:00",
+    "triagebox_commit": "8fe75f8",
+    "max_tokens": 256,
+    "temperature": 0.0,
+    "seed": 0,
+    "retrieval": "BM25, 4 chunks of up to 200 words",
+    "energy": "not measured",
+    "note": "single run; timing from streamed generation on a desktop GPU, not an edge device"
+  }
+}

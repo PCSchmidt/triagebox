@@ -83,4 +83,11 @@ def test_prompt_versions():
     assert "For example: 'ANSWER: 1998" in v2 and "For example: 'ANSWER: 1998" not in v1
     assert "[d1#0]" in v1 and "[d1#0]" in v2 and "QUESTION: q" in v2
     with pytest.raises(ValueError):
-        build_prompt("q", chunks, version=3)
+        build_prompt("q", chunks, version=9)
+
+
+def test_v3_uses_a_placeholder_and_v4_the_first_passage_id():
+    chunks = [Chunk("d1#0", "d1", "text"), Chunk("d2#0", "d2", "more")]
+    v3, v4 = build_prompt("q", chunks, version=3), build_prompt("q", chunks, version=4)
+    assert "[ID]" in v3 and "doc1#3" not in v3 and "doc1#3" not in v4
+    assert "<the answer, in a few words or one sentence> [d1#0]" in v4

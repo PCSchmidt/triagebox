@@ -28,10 +28,12 @@ class ServerProc:
         seed: int = 0,
         log: Path | None = None,
         start_timeout_s: float = 240.0,
+        extra_args: tuple[str, ...] = (),
     ):
         self.exe, self.model, self.port = Path(exe), Path(model), port
         self.ctx, self.gpu_layers, self.seed = ctx, gpu_layers, seed
         self.log, self.start_timeout_s = log, start_timeout_s
+        self.extra_args = tuple(extra_args)
         self._proc: subprocess.Popen | None = None
 
     @property
@@ -49,6 +51,7 @@ class ServerProc:
             "--host", "127.0.0.1",
             "--port", str(self.port),
             "--no-webui",
+            *self.extra_args,
         ]
 
     def _healthy(self) -> bool:

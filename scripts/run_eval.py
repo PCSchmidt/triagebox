@@ -57,7 +57,7 @@ def main() -> None:
     ap.add_argument("--n-per-kind", type=int, default=100)
     ap.add_argument("--k", type=int, default=4)
     ap.add_argument("--max-tokens", type=int, default=256)
-    ap.add_argument("--prompt-version", type=int, default=1, choices=[1, 2])
+    ap.add_argument("--prompt-version", type=int, default=1, choices=[1, 2, 3, 4])
     ap.add_argument("--power", action="store_true", help="sample GPU power with nvidia-smi")
     args = ap.parse_args()
     if args.split == "test":

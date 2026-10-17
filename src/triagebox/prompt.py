@@ -21,11 +21,16 @@ ANSWER_TAG = "ANSWER:"
 REFUSE_TAG = "INSUFFICIENT_EVIDENCE"
 _CITATION = re.compile(r"\[([^\[\]\s]+)\]")
 
-PROMPT_VERSIONS = (1, 2)
+PROMPT_VERSIONS = (1, 2, 3, 4)
 
 
 def build_prompt(question: str, chunks: list[Chunk], version: int = 1) -> str:
-    """Prompt for ``question`` over ``chunks``. Version 2 adds an explicit format example."""
+    """Prompt for ``question`` over ``chunks``.
+
+    Version 2 adds an explicit format example. Versions 3 and 4 exist because small models
+    copied v2's example id (``doc1#3``) or prefixed ``doc`` onto real ids: v3 uses a
+    placeholder instead of an id, v4 uses the id of the first passage shown.
+    """
     if version not in PROMPT_VERSIONS:
         raise ValueError(f"unknown prompt version {version}")
     context = "\n\n".join(f"[{c.id}]\n{c.text}" for c in chunks) if chunks else "(no context retrieved)"
@@ -35,6 +40,17 @@ def build_prompt(question: str, chunks: list[Chunk], version: int = 1) -> str:
             f"If the context does not contain the answer, reply with exactly {REFUSE_TAG}.\n"
             f"Otherwise reply starting with '{ANSWER_TAG}' and follow every claim with the id of the "
             "supporting passage in square brackets, for example [doc1#3].\n\n"
+        )
+    elif version in (3, 4):
+        example_id = "ID" if version == 3 else (chunks[0].id if chunks else "ID")
+        head = (
+            "You answer questions using ONLY the context below. Do not use outside knowledge.\n"
+            "Each passage starts with its id in square brackets on its own line.\n"
+            "Reply in exactly one of these two formats.\n"
+            f"1) If the context answers the question: '{ANSWER_TAG} <the answer, in a few words or one sentence> [{example_id}]'. "
+            "Replace the id in brackets with the id of the passage that contains the answer, copied exactly as it appears "
+            "in the context, with nothing added to it. The answer text comes first.\n"
+            f"2) If the context does not contain the answer: '{REFUSE_TAG}'.\n\n"
         )
     else:
         head = (
