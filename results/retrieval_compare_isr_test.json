@@ -1,0 +1,68 @@
+{
+  "BM25": {
+    "recall@1": {
+      "estimate": 0.786,
+      "low": 0.667,
+      "high": 0.905
+    },
+    "recall@2": {
+      "estimate": 0.905,
+      "low": 0.81,
+      "high": 0.976
+    },
+    "recall@4": {
+      "estimate": 0.929,
+      "low": 0.833,
+      "high": 1.0
+    },
+    "recall@8": {
+      "estimate": 0.929,
+      "low": 0.833,
+      "high": 1.0
+    }
+  },
+  "BGE-small dense": {
+    "recall@1": {
+      "estimate": 0.833,
+      "low": 0.714,
+      "high": 0.929
+    },
+    "recall@2": {
+      "estimate": 0.857,
+      "low": 0.738,
+      "high": 0.952
+    },
+    "recall@4": {
+      "estimate": 0.881,
+      "low": 0.786,
+      "high": 0.976
+    },
+    "recall@8": {
+      "estimate": 0.976,
+      "low": 0.929,
+      "high": 1.0
+    }
+  },
+  "Hybrid (RRF)": {
+    "recall@1": {
+      "estimate": 0.786,
+      "low": 0.667,
+      "high": 0.905
+    },
+    "recall@2": {
+      "estimate": 0.929,
+      "low": 0.833,
+      "high": 1.0
+    },
+    "recall@4": {
+      "estimate": 0.929,
+      "low": 0.833,
+      "high": 1.0
+    },
+    "recall@8": {
+      "estimate": 0.929,
+      "low": 0.833,
+      "high": 1.0
+    }
+  }
+}

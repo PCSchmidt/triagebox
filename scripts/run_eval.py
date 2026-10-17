@@ -16,6 +16,7 @@ to ``data/runs/`` (untracked) because they quote the benchmark's passages.
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
 import statistics
 import subprocess
@@ -35,7 +36,7 @@ from triagebox.prompt import ParsedResponse
 from triagebox.rag import Bm25Index, chunk_text
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "data" / "squad_v2"
+DATASETS = {"squad": ROOT / "data" / "squad_v2", "isr": ROOT / "eval" / "isr"}
 
 
 def git_commit() -> str:
@@ -53,6 +54,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--server-url", default="http://127.0.0.1:8080")
     ap.add_argument("--label", required=True, help="e.g. qwen2.5-7b-q4_k_m")
+    ap.add_argument("--dataset", choices=sorted(DATASETS), default="squad")
     ap.add_argument("--split", choices=["dev", "test"], default="dev")
     ap.add_argument("--n-per-kind", type=int, default=100)
     ap.add_argument("--k", type=int, default=4)
@@ -63,11 +65,12 @@ def main() -> None:
     if args.split == "test":
         print("NOTE: the test split is for final numbers only; do not tune on it.", file=sys.stderr)
 
+    DATA = DATASETS[args.dataset]
     docs = load_corpus(DATA / f"{args.split}_corpus.jsonl")
     all_items = load_items(DATA / f"{args.split}_questions.jsonl")
     ans = [i for i in all_items if i.answerable][: args.n_per_kind]
     unans = [i for i in all_items if not i.answerable][: args.n_per_kind]
-    items = [x for pair in zip(ans, unans) for x in pair]  # interleave so drift hits both kinds equally
+    items = [x for pair in itertools.zip_longest(ans, unans) for x in pair if x is not None]  # interleave so drift hits both kinds equally
     chunks = [c for d, t in docs.items() for c in chunk_text(d, t, max_words=200, overlap=0)]
     index = Bm25Index(chunks)
 
@@ -95,7 +98,7 @@ def main() -> None:
             model_out.append(Outcome(item, res.parsed, retrieved))
             sys_parsed = res.parsed if res.accepted else ParsedResponse("refusal", res.reason)
             system_out.append(Outcome(item, sys_parsed, retrieved))
-            if item.answerable and any(r.rsplit("#", 1)[0] in item.gold_docs for r in res.retrieved_ids):
+            if item.answerable and all(g in {r.rsplit("#", 1)[0] for r in res.retrieved_ids} for g in item.gold_docs):
                 ceiling_hits += 1
             rows.append(
                 {

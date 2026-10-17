@@ -1,0 +1,61 @@
+{"alt_answers": [], "answerable": true, "gold_answer": "Panamanian", "gold_docs": ["d01"], "id": "A-dev-01", "question": "What flag did the bulk carrier seen off Cape Orlin fly?"}
+{"alt_answers": ["0350"], "answerable": true, "gold_answer": "0350Z", "gold_docs": ["d01"], "id": "A-dev-02", "question": "Between which times did the Karelia Star's AIS go quiet?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "equipment fault", "gold_docs": ["d01"], "id": "A-dev-03", "question": "What did the Cape Orlin post think caused the AIS gap?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Karelia Sun", "gold_docs": ["d02"], "id": "A-dev-04", "question": "Which ship asked the pilot station for an anchorage berth?"}
+{"alt_answers": ["8 kn", "eight knots"], "answerable": true, "gold_answer": "8 knots", "gold_docs": ["d02"], "id": "A-dev-05", "question": "How fast was the Karelia Sun travelling?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "north-northwest", "gold_docs": ["d02"], "id": "A-dev-06", "question": "In what direction was the Liberian-flagged ship heading?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Karelia Star", "gold_docs": ["d01", "d02"], "id": "M-dev-01", "question": "Which of the two ships off Cape Orlin was moving faster?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-dev-01", "question": "How many crew were aboard the Karelia Star?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-dev-02", "question": "Which port did the Karelia Sun last sail from?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-dev-01", "question": "What was the hull colour of the Karelia Sun?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-dev-01", "question": "Why did the Karelia Star contact the harbour pilot station?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "4417", "gold_docs": ["d03"], "id": "A-dev-07", "question": "What transponder code did track 7731 squawk?"}
+{"alt_answers": ["18000"], "answerable": true, "gold_answer": "18,000 feet", "gold_docs": ["d03"], "id": "A-dev-08", "question": "At what altitude was the twin-engine turboprop flying?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Dunmere hills", "gold_docs": ["d03"], "id": "A-dev-09", "question": "Where was track 7731 lost?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Tarn Field", "gold_docs": ["d04"], "id": "A-dev-10", "question": "Where was the piston aircraft's filed flight plan taking it?"}
+{"alt_answers": ["110 kn"], "answerable": true, "gold_answer": "110 knots", "gold_docs": ["d04"], "id": "A-dev-11", "question": "What groundspeed did track 7740 have?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Tarn Field approach", "gold_docs": ["d04"], "id": "A-dev-12", "question": "To whom was track 7740 handed off?"}
+{"alt_answers": ["turboprop"], "answerable": true, "gold_answer": "7731", "gold_docs": ["d03", "d04"], "id": "M-dev-02", "question": "Which of the two tracks flew higher?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-dev-03", "question": "What was the registration of the aircraft on track 7731?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-dev-02", "question": "What was the destination of track 7731?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-dev-02", "question": "At what time was track 7731 handed off to the neighbouring sector?"}
+{"alt_answers": ["6"], "answerable": true, "gold_answer": "six", "gold_docs": ["d05"], "id": "A-dev-13", "question": "How many trucks were in the convoy at checkpoint Birch?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "sand", "gold_docs": ["d05"], "id": "A-dev-14", "question": "What pattern were the Birch convoy vehicles painted in?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Marl bridge", "gold_docs": ["d05"], "id": "A-dev-15", "question": "Where did the staff car join the convoy?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Route 4", "gold_docs": ["d06"], "id": "A-dev-16", "question": "Which route were the buses on?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Lindqvist Tours", "gold_docs": ["d06"], "id": "A-dev-17", "question": "What operator name was on the buses?"}
+{"alt_answers": ["high"], "answerable": true, "gold_answer": "high confidence", "gold_docs": ["d06"], "id": "A-dev-18", "question": "How confident was the assessment of the bus convoy?"}
+{"alt_answers": ["Cedar", "Lindqvist"], "answerable": true, "gold_answer": "bus", "gold_docs": ["d05", "d06"], "id": "M-dev-03", "question": "Which of the two convoys was travelling faster?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-dev-04", "question": "What was the licence plate of the lead truck?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-dev-03", "question": "Did the buses carry unit markings?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-dev-03", "question": "Why did the convoy at checkpoint Birch stop?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "9.41 GHz", "gold_docs": ["d07"], "id": "A-dev-19", "question": "What frequency did the emitter heard at site Fenn use?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "14 minutes", "gold_docs": ["d07"], "id": "A-dev-20", "question": "How long was the Fenn signal present?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "second site", "gold_docs": ["d07"], "id": "A-dev-21", "question": "Why was no position fix possible for the Fenn emitter?"}
+{"alt_answers": ["2400"], "answerable": true, "gold_answer": "2,400", "gold_docs": ["d08"], "id": "A-dev-22", "question": "What was the pulse repetition interval of the Gorse emitter?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Hale", "gold_docs": ["d08"], "id": "A-dev-23", "question": "Which other site obtained a bearing on the Gorse emitter?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "040", "gold_docs": ["d08"], "id": "A-dev-24", "question": "On what bearing was the Gorse emitter heard?"}
+{"alt_answers": ["9.41"], "answerable": true, "gold_answer": "Fenn", "gold_docs": ["d07", "d08"], "id": "M-dev-04", "question": "Which of the two emitters operated on the higher frequency?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-dev-05", "question": "What was the modulation type of the Fenn emitter?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-dev-04", "question": "What was the estimated position of the Fenn emitter?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-dev-04", "question": "Which radar type did the Gorse emitter match?"}
+{"alt_answers": ["11"], "answerable": true, "gold_answer": "Eleven", "gold_docs": ["d09"], "id": "A-dev-25", "question": "How many aircraft were visible on Kellan's ramp?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "300", "gold_docs": ["d09"], "id": "A-dev-26", "question": "How long is the new taxiway at Kellan?"}
+{"alt_answers": ["2"], "answerable": true, "gold_answer": "two", "gold_docs": ["d09"], "id": "A-dev-27", "question": "How many hangars were completed at Kellan?"}
+{"alt_answers": ["65%"], "answerable": true, "gold_answer": "65 percent", "gold_docs": ["d10"], "id": "A-dev-28", "question": "How much cloud covered Dorne?"}
+{"alt_answers": ["200 m"], "answerable": true, "gold_answer": "200 metres", "gold_docs": ["d10"], "id": "A-dev-29", "question": "By how much was Dorne's perimeter fence extended?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "cloud", "gold_docs": ["d10"], "id": "A-dev-30", "question": "Why was the Dorne assessment made with low confidence?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Kellan", "gold_docs": ["d09", "d10"], "id": "M-dev-05", "question": "Which airfield showed more aircraft on its ramp?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-dev-06", "question": "What aircraft types were parked on Kellan's ramp?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-dev-05", "question": "How many hangars were completed at Dorne?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-dev-05", "question": "Which of Kellan's fuel tanks was removed?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "bearing", "gold_docs": ["d11"], "id": "A-dev-31", "question": "What part was replaced during the Cape Orlin maintenance?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "0.2 degrees", "gold_docs": ["d11"], "id": "A-dev-32", "question": "What was the azimuth alignment error after recalibration at Cape Orlin?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Pike Hill", "gold_docs": ["d11"], "id": "A-dev-33", "question": "What covered the Cape Orlin sector during the outage?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "lightning", "gold_docs": ["d12"], "id": "A-dev-34", "question": "What caused the Torre Point outage?"}
+{"alt_answers": ["1"], "answerable": true, "gold_answer": "One", "gold_docs": ["d12"], "id": "A-dev-35", "question": "How many technicians worked on the Torre Point repair?"}
+{"alt_answers": ["two", "twice", "2"], "answerable": true, "gold_answer": "second", "gold_docs": ["d12"], "id": "A-dev-36", "question": "How many attempts did Torre Point need to pass its acceptance check?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Cape Orlin", "gold_docs": ["d11", "d12"], "id": "M-dev-06", "question": "Which of the two radars was offline longer?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-dev-07", "question": "What was the cost of the repair at Torre Point?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-dev-06", "question": "Which backup radar covered Torre Point during its outage?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-dev-06", "question": "What did lightning damage at Cape Orlin?"}

@@ -1,0 +1,4 @@
+SHA-256 of the test files when first built. The test split is for one final run per configuration;
+no prompt, retrieval or threshold choice may be made on it. A change to these hashes means the set was edited.
+217279c3052df474931601c951f29f7bf32a91940d41b1c601d441093beae26c  test_corpus.jsonl
+45bb5c66ed5bcb2346ab4a6f49ce37546f794fe599d814d200f49d45dea953e7  test_questions.jsonl

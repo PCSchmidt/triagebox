@@ -1,0 +1,60 @@
+{"alt_answers": [], "answerable": true, "gold_answer": "Danish", "gold_docs": ["d13"], "id": "A-test-01", "question": "What flag does the trawler near Saltholm light fly?"}
+{"alt_answers": ["3"], "answerable": true, "gold_answer": "Three", "gold_docs": ["d13"], "id": "A-test-02", "question": "How many people were seen on the trawler's deck?"}
+{"alt_answers": ["10 minutes"], "answerable": true, "gold_answer": "ten minutes", "gold_docs": ["d13"], "id": "A-test-03", "question": "For how long did the trawler fail to answer VHF calls?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Brevik", "gold_docs": ["d14"], "id": "A-test-04", "question": "Where was the tanker bound?"}
+{"alt_answers": ["13 kn"], "answerable": true, "gold_answer": "13 knots", "gold_docs": ["d14"], "id": "A-test-05", "question": "How fast was the tanker steaming?"}
+{"alt_answers": ["16"], "answerable": true, "gold_answer": "channel 16", "gold_docs": ["d13"], "id": "A-test-06", "question": "Which VHF channel did Wren call on?"}
+{"alt_answers": ["tanker"], "answerable": true, "gold_answer": "Orsa Bright", "gold_docs": ["d13", "d14"], "id": "M-test-01", "question": "Which of the two vessels was showing navigation lights?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-test-01", "question": "Who owned the trawler?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-test-01", "question": "Where was the trawler bound?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-test-01", "question": "What speed was the trawler making when it turned east?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "1126", "gold_docs": ["d15"], "id": "A-test-07", "question": "What transponder code did track 2208 squawk?"}
+{"alt_answers": ["33000"], "answerable": true, "gold_answer": "33,000 feet", "gold_docs": ["d15"], "id": "A-test-08", "question": "At what altitude was the jet transport flying?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Venn", "gold_docs": ["d15"], "id": "A-test-09", "question": "Where was the flight plan of track 2208 taking it?"}
+{"alt_answers": ["2 minutes"], "answerable": true, "gold_answer": "two minutes", "gold_docs": ["d16"], "id": "A-test-10", "question": "How long did the helicopter hover?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Brack quarry", "gold_docs": ["d16"], "id": "A-test-11", "question": "What was the helicopter hovering near?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "clutter", "gold_docs": ["d16"], "id": "A-test-12", "question": "Why was track 2215 lost?"}
+{"alt_answers": ["helicopter"], "answerable": true, "gold_answer": "2215", "gold_docs": ["d15", "d16"], "id": "M-test-02", "question": "Which of the two tracks was slower?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-test-02", "question": "Who operated the helicopter?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-test-02", "question": "What was the destination of track 2215?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-test-02", "question": "What code did the helicopter squawk while hovering?"}
+{"alt_answers": ["4"], "answerable": true, "gold_answer": "four", "gold_docs": ["d17"], "id": "A-test-13", "question": "How many tracked vehicles were in the tree line near Elm?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "camouflage netting", "gold_docs": ["d17"], "id": "A-test-14", "question": "What covered three of the vehicles at Elm?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "dog", "gold_docs": ["d17"], "id": "A-test-15", "question": "Why did the Ash patrol withdraw?"}
+{"alt_answers": ["hay"], "answerable": true, "gold_answer": "trailer", "gold_docs": ["d18"], "id": "A-test-16", "question": "What was the tractor pulling?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "25 minutes", "gold_docs": ["d18"], "id": "A-test-17", "question": "How long did the Birchfield patrol watch the tractor?"}
+{"alt_answers": ["Moss"], "answerable": true, "gold_answer": "south of Moss village", "gold_docs": ["d18"], "id": "A-test-18", "question": "Where was the tractor seen?"}
+{"alt_answers": ["high confidence"], "answerable": true, "gold_answer": "Birchfield", "gold_docs": ["d17", "d18"], "id": "M-test-03", "question": "Which of the two patrols made the assessment with higher confidence?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-test-03", "question": "What was the name of the commander of the vehicles near Elm?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-test-03", "question": "At what time did the Birchfield patrol withdraw?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-test-03", "question": "How many personnel did the Birchfield patrol see cooking?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "156.80", "gold_docs": ["d19"], "id": "A-test-19", "question": "What frequency was the Larch carrier on?"}
+{"alt_answers": ["six minutes"], "answerable": true, "gold_answer": "6 minutes", "gold_docs": ["d19"], "id": "A-test-20", "question": "How long did the Larch transmission last?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "language team", "gold_docs": ["d19"], "id": "A-test-21", "question": "Who was the Larch recording passed to?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "100", "gold_docs": ["d20"], "id": "A-test-22", "question": "How many times per second did the Moor signal hop?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "22 minutes", "gold_docs": ["d20"], "id": "A-test-23", "question": "How long did the Moor signal last?"}
+{"alt_answers": ["east of Moor"], "answerable": true, "gold_answer": "25 kilometres east of Moor", "gold_docs": ["d20"], "id": "A-test-24", "question": "Where was the Moor emitter fixed?"}
+{"alt_answers": ["frequency-hopping"], "answerable": true, "gold_answer": "Moor", "gold_docs": ["d19", "d20"], "id": "M-test-04", "question": "Which of the two signals lasted longer?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-test-04", "question": "What was the speaker's name on the Larch signal?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-test-04", "question": "What military radio family did the Larch signal match?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-test-04", "question": "How did site Larch obtain its position fix?"}
+{"alt_answers": ["3"], "answerable": true, "gold_answer": "three", "gold_docs": ["d21"], "id": "A-test-25", "question": "How many cranes were operating at Port Velis?"}
+{"alt_answers": ["14"], "answerable": true, "gold_answer": "Fourteen", "gold_docs": ["d21"], "id": "A-test-26", "question": "How many ships were at Port Velis?"}
+{"alt_answers": ["120"], "answerable": true, "gold_answer": "120 containers", "gold_docs": ["d21"], "id": "A-test-27", "question": "How large was the new storage yard at Port Velis?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "dredger", "gold_docs": ["d22"], "id": "A-test-28", "question": "What was working in Port Harrow's approach channel?"}
+{"alt_answers": ["8"], "answerable": true, "gold_answer": "eight", "gold_docs": ["d22"], "id": "A-test-29", "question": "How many ships had been at Port Harrow on the earlier pass?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "cloud", "gold_docs": ["d22"], "id": "A-test-30", "question": "What limited the analyst's view at Port Harrow?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Velis", "gold_docs": ["d21", "d22"], "id": "M-test-05", "question": "Which of the two ports had more ships?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-test-05", "question": "Which flags did the ships at Port Velis fly?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-test-05", "question": "How many containers were in the storage yard at Port Harrow?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-test-05", "question": "Which crane was removed from the quay at Port Velis?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "4.2", "gold_docs": ["d23"], "id": "A-test-31", "question": "Which firmware version replaced version 3.9?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "remotely", "gold_docs": ["d23"], "id": "A-test-32", "question": "How was the Quarry-North upgrade carried out?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Quarry-East", "gold_docs": ["d23"], "id": "A-test-33", "question": "What covered the Quarry-North area during the outage?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "hydrophone cable", "gold_docs": ["d24"], "id": "A-test-34", "question": "What caused the Harbour-3 outage?"}
+{"alt_answers": ["2"], "answerable": true, "gold_answer": "Two", "gold_docs": ["d24"], "id": "A-test-35", "question": "How many divers replaced the cable section?"}
+{"alt_answers": ["5 km"], "answerable": true, "gold_answer": "5 kilometres", "gold_docs": ["d24"], "id": "A-test-36", "question": "What is the detection range of Harbour-3?"}
+{"alt_answers": [], "answerable": true, "gold_answer": "Harbour-3", "gold_docs": ["d23", "d24"], "id": "M-test-06", "question": "Which of the two sensors was offline longer?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U1-test-06", "question": "What was the cost of the Quarry-North upgrade?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U2-test-06", "question": "What firmware version did Harbour-3 run?"}
+{"alt_answers": [], "answerable": false, "gold_answer": null, "gold_docs": [], "id": "U3-test-06", "question": "Which neighbouring sensor covered Harbour-3 during its outage?"}

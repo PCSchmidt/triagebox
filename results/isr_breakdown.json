@@ -1,0 +1,335 @@
+{
+  "isr-qwen2.5-7b-q4_k_m-p2_dev": {
+    "A": {
+      "n": 36,
+      "correct_system": 36,
+      "correct_model": 36,
+      "answered_model": 36,
+      "answered_system": 36
+    },
+    "U1": {
+      "n": 7,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 1,
+      "answered_system": 1
+    },
+    "U2": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 0,
+      "answered_system": 0
+    },
+    "U3": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 0,
+      "answered_system": 0
+    },
+    "M": {
+      "n": 6,
+      "correct_system": 2,
+      "correct_model": 2,
+      "answered_model": 2,
+      "answered_system": 2
+    }
+  },
+  "isr-qwen2.5-7b-q8_0-p2_dev": {
+    "A": {
+      "n": 36,
+      "correct_system": 36,
+      "correct_model": 36,
+      "answered_model": 36,
+      "answered_system": 36
+    },
+    "U1": {
+      "n": 7,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 1,
+      "answered_system": 1
+    },
+    "U2": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 0,
+      "answered_system": 0
+    },
+    "U3": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 0,
+      "answered_system": 0
+    },
+    "M": {
+      "n": 6,
+      "correct_system": 2,
+      "correct_model": 2,
+      "answered_model": 3,
+      "answered_system": 3
+    }
+  },
+  "isr-qwen2.5-1.5b-q8_0-p3_dev": {
+    "A": {
+      "n": 36,
+      "correct_system": 32,
+      "correct_model": 32,
+      "answered_model": 34,
+      "answered_system": 33
+    },
+    "U1": {
+      "n": 7,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 3,
+      "answered_system": 3
+    },
+    "U2": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 5,
+      "answered_system": 4
+    },
+    "U3": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 5,
+      "answered_system": 4
+    },
+    "M": {
+      "n": 6,
+      "correct_system": 2,
+      "correct_model": 2,
+      "answered_model": 3,
+      "answered_system": 3
+    }
+  },
+  "isr-qwen2.5-1.5b-q4_k_m-p3_dev": {
+    "A": {
+      "n": 36,
+      "correct_system": 25,
+      "correct_model": 27,
+      "answered_model": 27,
+      "answered_system": 25
+    },
+    "U1": {
+      "n": 7,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 1,
+      "answered_system": 1
+    },
+    "U2": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 1,
+      "answered_system": 0
+    },
+    "U3": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 1,
+      "answered_system": 1
+    },
+    "M": {
+      "n": 6,
+      "correct_system": 1,
+      "correct_model": 2,
+      "answered_model": 2,
+      "answered_system": 1
+    }
+  },
+  "isr-qwen2.5-7b-q4_k_m-p2_test": {
+    "A": {
+      "n": 36,
+      "correct_system": 35,
+      "correct_model": 35,
+      "answered_model": 35,
+      "answered_system": 35
+    },
+    "U1": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 1,
+      "answered_system": 1
+    },
+    "U2": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 0,
+      "answered_system": 0
+    },
+    "U3": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 1,
+      "answered_system": 1
+    },
+    "M": {
+      "n": 6,
+      "correct_system": 3,
+      "correct_model": 3,
+      "answered_model": 5,
+      "answered_system": 5
+    }
+  },
+  "isr-qwen2.5-7b-q8_0-p2_test": {
+    "A": {
+      "n": 36,
+      "correct_system": 34,
+      "correct_model": 34,
+      "answered_model": 34,
+      "answered_system": 34
+    },
+    "U1": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 1,
+      "answered_system": 1
+    },
+    "U2": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 0,
+      "answered_system": 0
+    },
+    "U3": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 1,
+      "answered_system": 1
+    },
+    "M": {
+      "n": 6,
+      "correct_system": 4,
+      "correct_model": 4,
+      "answered_model": 5,
+      "answered_system": 5
+    }
+  },
+  "isr-qwen2.5-1.5b-fp16-p3_test": {
+    "A": {
+      "n": 36,
+      "correct_system": 30,
+      "correct_model": 32,
+      "answered_model": 34,
+      "answered_system": 32
+    },
+    "U1": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 4,
+      "answered_system": 3
+    },
+    "U2": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 3,
+      "answered_system": 3
+    },
+    "U3": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 5,
+      "answered_system": 3
+    },
+    "M": {
+      "n": 6,
+      "correct_system": 2,
+      "correct_model": 2,
+      "answered_model": 5,
+      "answered_system": 5
+    }
+  },
+  "isr-qwen2.5-1.5b-q8_0-p3_test": {
+    "A": {
+      "n": 36,
+      "correct_system": 29,
+      "correct_model": 31,
+      "answered_model": 33,
+      "answered_system": 31
+    },
+    "U1": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 3,
+      "answered_system": 3
+    },
+    "U2": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 3,
+      "answered_system": 3
+    },
+    "U3": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 5,
+      "answered_system": 4
+    },
+    "M": {
+      "n": 6,
+      "correct_system": 2,
+      "correct_model": 2,
+      "answered_model": 5,
+      "answered_system": 5
+    }
+  },
+  "isr-qwen2.5-1.5b-q4_k_m-p3_test": {
+    "A": {
+      "n": 36,
+      "correct_system": 21,
+      "correct_model": 27,
+      "answered_model": 28,
+      "answered_system": 22
+    },
+    "U1": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 1,
+      "answered_system": 1
+    },
+    "U2": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 2,
+      "answered_system": 2
+    },
+    "U3": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 0,
+      "answered_model": 2,
+      "answered_system": 2
+    },
+    "M": {
+      "n": 6,
+      "correct_system": 0,
+      "correct_model": 1,
+      "answered_model": 2,
+      "answered_system": 1
+    }
+  }
+}

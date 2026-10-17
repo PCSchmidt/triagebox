@@ -3,8 +3,7 @@
     python scripts/retrieval_compare.py --split dev
 
 Embeddings: BGE-small-en-v1.5 (Q8_0 GGUF, MIT licence) served by llama.cpp. Recall@k is
-over answerable questions: the gold paragraph counts as found if any of the top-k
-chunks comes from it. Dev split only while building; per the project rules the test
+over answerable questions: a hit needs every gold document (two for comparison questions) among the top-k chunks. Dev split only while building; per the project rules the test
 split is for final numbers. Bootstrap 95% intervals are over questions.
 """
 
@@ -21,7 +20,7 @@ from triagebox.rag import Bm25Index, chunk_text
 from triagebox.serverproc import ServerProc
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "data" / "squad_v2"
+DATASETS = {"squad": ROOT / "data" / "squad_v2", "isr": ROOT / "eval" / "isr"}
 EXE = ROOT / "tools" / "llama-b11700" / "llama-server.exe"
 MODEL = ROOT / "models" / "bge-small" / "bge-small-en-v1.5-q8_0.gguf"
 KS = (1, 2, 4, 8)
@@ -36,10 +35,12 @@ def ci(flags: list[int], resamples: int = 2000) -> tuple[float, float, float]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--dataset", choices=sorted(DATASETS), default="squad")
     ap.add_argument("--split", choices=["dev", "test"], default="dev")
     ap.add_argument("--port", type=int, default=8081)
     args = ap.parse_args()
 
+    DATA = DATASETS[args.dataset]
     docs = load_corpus(DATA / f"{args.split}_corpus.jsonl")
     items = [i for i in load_items(DATA / f"{args.split}_questions.jsonl") if i.answerable]
     chunks = [c for d, t in docs.items() for c in chunk_text(d, t, max_words=200, overlap=0)]
@@ -57,10 +58,10 @@ def main() -> None:
             for it in items:
                 ranked = [c.doc_id for c, _ in index.search(it.question, k=max(KS))]
                 for k in KS:
-                    hits[k].append(int(it.gold_docs[0] in ranked[:k]))
+                    hits[k].append(int(all(g in ranked[:k] for g in it.gold_docs)))
             out[name] = {f"recall@{k}": dict(zip(("estimate", "low", "high"), (round(x, 3) for x in ci(hits[k])))) for k in KS}
             print(name, "  ".join(f"@{k} {100 * out[name][f'recall@{k}']['estimate']:.1f}% [{100 * out[name][f'recall@{k}']['low']:.0f}-{100 * out[name][f'recall@{k}']['high']:.0f}]" for k in KS), flush=True)
-    (ROOT / "results" / f"retrieval_compare_{args.split}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
+    (ROOT / "results" / f"retrieval_compare_{args.dataset}_{args.split}.json" if args.dataset != "squad" else f"retrieval_compare_{args.split}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

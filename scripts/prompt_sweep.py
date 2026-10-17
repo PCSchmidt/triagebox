@@ -32,6 +32,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--models", nargs="+", choices=sorted(MODELS), required=True)
     ap.add_argument("--prompts", nargs="+", type=int, required=True)
+    ap.add_argument("--dataset", choices=["squad", "isr"], default="squad")
+    ap.add_argument("--split", choices=["dev", "test"], default="dev")
     args = ap.parse_args()
     for key in args.models:
         label, path = MODELS[key]
@@ -40,7 +42,7 @@ def main() -> None:
                 print(f"== {label} prompt v{p}", flush=True)
                 subprocess.run(
                     [sys.executable, str(ROOT / "scripts" / "run_eval.py"), "--server-url", s.url,
-                     "--label", f"{label}-p{p}", "--split", "dev", "--n-per-kind", "100", "--prompt-version", str(p)],
+                     "--label", (f"isr-{label}-p{p}" if args.dataset == "isr" else f"{label}-p{p}"), "--dataset", args.dataset, "--split", args.split, "--n-per-kind", "100", "--prompt-version", str(p)],
                     check=True,
                 )
 
