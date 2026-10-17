@@ -34,7 +34,7 @@ Numbers before the parser fix (prompt v1, lenient parser), kept for transparency
 
 - **Prompt v2 fixed the format, not the judgment.** Malformed replies went from 12.5% to 0.5% and citation validity from 86% to 100%. Accuracy rose from 60% to 74% against a 91% ceiling.
 - **The hallucination figure got worse, honestly.** Under v1, 23% looked better only because many replies were unusable and so did not count as answers. With well-formed replies, the model answers about 31% of the near-miss unanswerable questions instead of refusing.
-- **The citation policy did nothing against hallucination under v2.** Every citation is valid, so nothing is rejected: system-level and model-level hallucination are both 31%. A model that cites a real, retrieved paragraph for an invented answer passes the structural check. This is the main reason a judge model for faithfulness is on the roadmap.
+- **The citation policy did nothing against hallucination under v2.** Every citation is valid, so nothing is rejected: system-level and model-level hallucination are both 31%. A model that cites a real, retrieved paragraph for an invented answer passes the structural check. This is the main reason a judge model for faithfulness is on the roadmap; [faithfulness.md](faithfulness.md) follows it up and finds that about half of the 31% are answers the cited passage does support.
 - **Statistical caution.** With 100 questions per kind, a rate near 30% has a 95% interval of roughly ±9 points. The accuracy gain (60% to 74%) is well outside that; the hallucination change (23% to 31%) is not distinguishable from noise on its own.
 
 ## Reproducibility

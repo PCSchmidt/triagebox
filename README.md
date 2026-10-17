@@ -4,7 +4,7 @@
 
 An air-gapped box that answers questions about a set of documents using a small, quantised language model, and **refuses to answer without citing the passages it was shown**. The question this project exists to answer is how much quality each step down in model size and precision costs, per joule, on edge hardware.
 
-**Status: quantisation ladder measured on a desktop-class laptop GPU; nothing yet on an edge device, and the faithfulness judge and the locked test split are still to come.** The retrieval, citation policy, evaluation metrics, signed sync bundles, one-way export, audit log and boot-time integrity checks are implemented and unit-tested (pure Python plus `cryptography` for signatures). A SQuAD 2.0 benchmark subset (dev and test splits, half unanswerable) is prepared (see [data](docs/data.md)), and five configurations of Qwen2.5-Instruct (1.5B at FP16, Q8_0, Q4_K_M; 7B at Q8_0, Q4_K_M) have been run through the full pipeline on the dev split, with thermally gated speed and energy measurements (see [ladder](docs/ladder.md)). See the [roadmap](docs/roadmap.md).
+**Status: quantisation ladder measured on a desktop-class laptop GPU; nothing yet on an edge device, and the locked test split is still to come. A first faithfulness check (a local judge model plus hand labels, [faithfulness](docs/faithfulness.md)) found that about half of the 31% "hallucinations" are answers the cited passage does support, and that 8% of answers to answerable questions cite a passage that lacks the answer.** The retrieval, citation policy, evaluation metrics, signed sync bundles, one-way export, audit log and boot-time integrity checks are implemented and unit-tested (pure Python plus `cryptography` for signatures). A SQuAD 2.0 benchmark subset (dev and test splits, half unanswerable) is prepared (see [data](docs/data.md)), and five configurations of Qwen2.5-Instruct (1.5B at FP16, Q8_0, Q4_K_M; 7B at Q8_0, Q4_K_M) have been run through the full pipeline on the dev split, with thermally gated speed and energy measurements (see [ladder](docs/ladder.md)). See the [roadmap](docs/roadmap.md).
 
 Part of [physical-ai-portfolio](https://github.com/PCSchmidt/physical-ai-portfolio). It reuses the measurement discipline from [Sentinel Node](https://github.com/PCSchmidt/sentinel-node).
 
@@ -67,14 +67,14 @@ What it shows, and what it doesn't:
 
 ## What the checks do and do not show
 
-- A **valid citation** means the model cited a passage it was actually shown. It does not mean that passage supports the claim. `lexical_support` is a cheap overlap proxy, not a faithfulness judge; a judge model plus hand-checked samples are planned.
+- A **valid citation** means the model cited a passage it was actually shown. It does not mean that passage supports the claim. `lexical_support` is a cheap overlap proxy. A judge model was tried ([faithfulness](docs/faithfulness.md)); it agrees with hand labels only 72% of the time, so it is a noisy screen, not a measurement.
 - The **audit log** detects edits, reordering and removal in the middle. Truncating the end is not detectable from the log alone (documented and tested).
 - **Bundles** reject replays only if the receiver persists the highest accepted sequence number. Key distribution and revocation are out of scope.
 - No part of this has been security-reviewed.
 
 ## Planned measurements (not yet done)
 
-1. A judge model for citation faithfulness (does the cited passage support the answer?), with a hand-checked sample and reported agreement. This addresses the main failure the ladder exposed.
+1. A grounding check as a pipeline policy (reject answers whose cited passages lack the answer), a second labeller, and a judge from another model family. A first judge study is in [faithfulness](docs/faithfulness.md).
 2. A prompt tuned for the small models, since the current prompt was tuned on the 7B model, and repeated runs to put error bars on the ladder.
 3. The final numbers on the locked test split, and an ISR-flavoured evaluation set over public documents ([protocol](docs/eval-protocol.md)).
 4. The same ladder on a Jetson Orin Nano once available, where energy per answer will not simply track latency.

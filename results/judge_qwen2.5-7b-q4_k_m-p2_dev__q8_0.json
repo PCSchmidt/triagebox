@@ -1,0 +1,18 @@
+{
+  "run": "qwen2.5-7b-q4_k_m-p2_dev",
+  "judge": "Qwen2.5-7B-Instruct q8_0",
+  "n_judged": 116,
+  "answered_answerable": {
+    "n": 85,
+    "supported": 0.8588235294117647,
+    "not_supported": 0.1411764705882353,
+    "unparsed": 0.0
+  },
+  "answered_unanswerable": {
+    "n": 31,
+    "supported": 0.6451612903225806,
+    "not_supported": 0.3548387096774194,
+    "unparsed": 0.0
+  },
+  "note": "judge verdicts only; agreement with hand labels is in judge_agreement_<run>.json"
+}

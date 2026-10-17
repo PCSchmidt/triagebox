@@ -9,7 +9,7 @@
 | 0.3b | Thermally controlled timing protocol: cool-down gating, short bursts, interleaved rounds, clock, temperature and throttle reasons logged beside each number | Desktop GPU | Done (rule revised once after the first pass; see ladder.md) |
 | 0.4 | Quantisation ladder (1.5B at FP16, Q8_0, Q4_K_M; 7B at Q8_0, Q4_K_M); accuracy, hallucination rate, citation validity; interleaved speed | Desktop GPU | Done (dev split, single run per configuration) |
 | 0.5 | Embedding retrieval versus BM25 on the same questions | Desktop GPU | Planned |
-| 0.6 | Judge-model faithfulness with hand-checked agreement | Desktop GPU | Planned |
+| 0.6 | Judge-model faithfulness with hand-checked agreement | Desktop GPU | Done on the 7B Q4_K_M p2 dev run (see faithfulness.md); judge agrees 72% with hand labels, so it is a noisy screen. Follow-up: grounding check as a pipeline policy |
 | 0.7 | Energy per answer and the quality-versus-joules chart | Laptop GPU; wall-power meter for system energy | Done for GPU board energy on the laptop GPU; wall-power and edge-device measurements remain |
 | 0.7b | Prompt tuned for the 1.5B models; repeated runs for error bars on the ladder | Desktop GPU | Planned |
 | 0.8 | Jetson Orin Nano measurements | Jetson | Planned |
