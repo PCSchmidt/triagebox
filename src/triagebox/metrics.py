@@ -6,7 +6,8 @@ Terms (see ``docs/eval-protocol.md``):
   answered instead of refusing.
 * **false refusal rate**: of the *answerable* questions, the fraction it refused.
 * **accuracy**: of the *answerable* questions, the fraction answered with text
-  containing the gold answer string (case- and whitespace-normalised). This is a
+  containing a gold answer string (case- and whitespace-normalised; an item may
+  list several acceptable strings). This is a
   crude containment test, suitable for short factual answers only.
 * **citation validity**: of all citations in answers, the fraction pointing at a
   passage that was actually retrieved. Structural only; not support.
@@ -30,6 +31,7 @@ class EvalItem:
     answerable: bool
     gold_docs: tuple[str, ...] = ()
     gold_answer: str | None = None
+    alt_answers: tuple[str, ...] = ()  # other acceptable answer strings
 
 
 @dataclass(frozen=True)
@@ -55,6 +57,11 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s.lower()).strip()
 
 
+def _contains_gold(item: EvalItem, text: str) -> bool:
+    golds = [g for g in (item.gold_answer, *item.alt_answers) if g]
+    return any(_norm(g) in _norm(text) for g in golds)
+
+
 def _rate(num: int, den: int) -> float | None:
     return num / den if den else None
 
@@ -70,9 +77,7 @@ def score(outcomes: list[Outcome]) -> Scores:
     correct = sum(
         1
         for o in answerable
-        if o.parsed.kind == "answer"
-        and o.item.gold_answer is not None
-        and _norm(o.item.gold_answer) in _norm(o.parsed.text)
+        if o.parsed.kind == "answer" and _contains_gold(o.item, o.parsed.text)
     )
     false_refusals = sum(1 for o in answerable if o.parsed.kind == "refusal")
     hallucinated = sum(1 for o in unanswerable if o.parsed.kind == "answer")

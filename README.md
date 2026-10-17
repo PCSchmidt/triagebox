@@ -4,7 +4,7 @@
 
 An air-gapped box that answers questions about a set of documents using a small, quantised language model, and **refuses to answer without citing the passages it was shown**. The question this project exists to answer is how much quality each step down in model size and precision costs, per joule, on edge hardware.
 
-**Status: scaffold, no model results yet.** The retrieval, citation policy, evaluation metrics, signed sync bundles, one-way export, audit log and boot-time integrity checks are implemented and unit-tested on a laptop (pure Python plus `cryptography` for signatures). No language model has been run, no evaluation set exists yet, and no latency, accuracy or energy numbers exist. See the [roadmap](docs/roadmap.md).
+**Status: scaffold plus an evaluation set and retrieval baseline; no model results yet.** The retrieval, citation policy, evaluation metrics, signed sync bundles, one-way export, audit log and boot-time integrity checks are implemented and unit-tested on a laptop (pure Python plus `cryptography` for signatures). A SQuAD 2.0 benchmark subset (dev and test splits, half unanswerable) is prepared and BM25 retrieves the gold paragraph in the top 4 for 93.7% of dev questions (see [data](docs/data.md)). No language model has been run, so there are no accuracy, hallucination, latency or energy numbers yet. See the [roadmap](docs/roadmap.md).
 
 Part of [physical-ai-portfolio](https://github.com/PCSchmidt/physical-ai-portfolio). It reuses the measurement discipline from [Sentinel Node](https://github.com/PCSchmidt/sentinel-node).
 
@@ -20,6 +20,7 @@ Disconnected, power-limited systems cannot call a cloud model, and a small model
 | `prompt` | Citation-forced prompt; reply protocol `ANSWER: ... [id]` or `INSUFFICIENT_EVIDENCE` | Parsing, malformed replies |
 | `citations` | Checks every cited id was actually retrieved; lexical-support proxy | Invented, mixed and missing citations |
 | `pipeline` | Retrieve → generate → enforce citation policy → audit | Accept/reject for each failure mode |
+| `dataset` | JSONL corpus/question files; SQuAD 2.0 converter with disjoint dev/test splits | Counts, determinism, round trip |
 | `metrics` | Hallucination rate on unanswerable questions, false refusals, accuracy, citation validity, gold-citation recall | Mixed sets and missing denominators |
 | `bench` | Time to first token, decode rate, energy per answer, Pareto front | Fake-clock timing, dominance |
 | `bundle` | Ed25519-signed store-and-forward bundles; replay, tamper and conflict handling | 10 rejection and merge cases |
@@ -36,7 +37,7 @@ Disconnected, power-limited systems cannot call a cloud model, and a small model
 
 ## Planned measurements (not yet done)
 
-1. An evaluation set of answerable and unanswerable questions over public documents ([protocol](docs/eval-protocol.md)).
+1. An ISR-flavoured evaluation set over public documents, to follow the SQuAD 2.0 benchmark ([protocol](docs/eval-protocol.md)).
 2. For each model size, precision (FP16, INT8, INT4) and runtime: answer accuracy, hallucination rate on unanswerable questions, citation validity, tokens per second, time to first token, and joules per answer.
 3. One quality-versus-joules Pareto chart, with repeated and interleaved measurements.
 4. The same on a Jetson Orin Nano once available.

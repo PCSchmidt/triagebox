@@ -4,6 +4,8 @@ Written before any results exist, so that the measurements cannot quietly shape 
 
 ## Corpus and questions
 
+The first benchmark is a SQuAD 2.0 subset (see [data.md](data.md)), chosen because it is a public benchmark with ground truth and adversarial unanswerable questions. The ISR-flavoured set described below is a second, domain-specific benchmark and is not built yet.
+
 - **Documents:** public, unclassified material only (for example US-government publications and other openly licensed text). Source and licence are recorded per document. Nothing from any employer or controlled source.
 - **Answerable questions:** each has one or more gold documents and a short gold answer string (a name, number or phrase) that must appear in a correct answer. Short factual answers keep the containment test meaningful.
 - **Unanswerable questions**, in three kinds, each a share of the set:

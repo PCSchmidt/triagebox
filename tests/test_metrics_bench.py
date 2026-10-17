@@ -100,3 +100,11 @@ def test_pareto_front_drops_dominated_points():
 def test_equal_points_both_stay_on_the_front():
     a, b = Point("a", 0.5, 10.0), Point("b", 0.5, 10.0)
     assert len(pareto_front([a, b])) == 2
+
+
+def test_any_alternative_gold_answer_counts():
+    item = EvalItem("a", "q", True, ("d1",), "Warsaw", alt_answers=("the Polish capital",))
+    s = score([outcome(item, answer("It is the Polish capital [d1#0].", "d1#0"))])
+    assert s.accuracy == 1.0
+    s = score([outcome(item, answer("It is Berlin [d1#0].", "d1#0"))])
+    assert s.accuracy == 0.0
