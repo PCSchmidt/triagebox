@@ -1,0 +1,57 @@
+{
+  "label": "qwen2.5-7b-q4_k_m-p2",
+  "split": "dev",
+  "n_answerable": 100,
+  "n_unanswerable": 100,
+  "k": 4,
+  "prompt_version": 2,
+  "retrieval_ceiling_answerable": 0.91,
+  "model_level": {
+    "n_answerable": 100,
+    "n_unanswerable": 100,
+    "accuracy": 0.74,
+    "false_refusal_rate": 0.14,
+    "hallucination_rate": 0.31,
+    "citation_validity": 1.0,
+    "citation_validity_doc_level": 1.0,
+    "gold_citation_recall": 0.8823529411764706,
+    "malformed_rate": 0.005
+  },
+  "system_level": {
+    "n_answerable": 100,
+    "n_unanswerable": 100,
+    "accuracy": 0.74,
+    "false_refusal_rate": 0.15,
+    "hallucination_rate": 0.31,
+    "citation_validity": 1.0,
+    "citation_validity_doc_level": 1.0,
+    "gold_citation_recall": 0.8823529411764706,
+    "malformed_rate": 0.0
+  },
+  "gpu_state_during_run": {
+    "median_sm_mhz": 210.0,
+    "max_sm_mhz": 1785,
+    "clock_fraction": 0.11764705882352941,
+    "max_temp_c": 97,
+    "power_or_thermal_throttle_seen": true,
+    "timing_trustworthy": false
+  },
+  "timing": {
+    "ttft_ms_median": 1435.260800004471,
+    "tokens_per_s_median": 15.218125123408843,
+    "total_ms_median": 2345.2626000071177,
+    "tokens_median": 15.0,
+    "joules_per_answer_median": 168.66925060158002,
+    "gpu_watts_median": 72.23372023809523
+  },
+  "meta": {
+    "date_utc": "2026-10-17T05:04:52+00:00",
+    "triagebox_commit": "4595f63",
+    "max_tokens": 256,
+    "temperature": 0.0,
+    "seed": 0,
+    "retrieval": "BM25, 4 chunks of up to 200 words",
+    "energy": "GPU board power from nvidia-smi (100 ms samples) x duration; GPU only, not system power",
+    "note": "single run; timing from streamed generation on a desktop GPU, not an edge device"
+  }
+}

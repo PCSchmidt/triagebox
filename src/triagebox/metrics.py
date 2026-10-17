@@ -10,7 +10,9 @@ Terms (see ``docs/eval-protocol.md``):
   list several acceptable strings). This is a
   crude containment test, suitable for short factual answers only.
 * **citation validity**: of all citations in answers, the fraction pointing at a
-  passage that was actually retrieved. Structural only; not support.
+  passage (chunk id) that was actually retrieved. Structural only; not support.
+  The doc-level variant counts a citation as valid if its paragraph was retrieved,
+  even with a wrong chunk number, to separate sloppy ids from invented sources.
 * **gold citation recall**: of answered answerable questions, the fraction citing
   at least one passage from a gold document.
 """
@@ -49,6 +51,7 @@ class Scores:
     false_refusal_rate: float | None
     hallucination_rate: float | None
     citation_validity: float | None
+    citation_validity_doc_level: float | None  # cited paragraph was retrieved, any chunk id
     gold_citation_recall: float | None
     malformed_rate: float | None
 
@@ -82,12 +85,14 @@ def score(outcomes: list[Outcome]) -> Scores:
     false_refusals = sum(1 for o in answerable if o.parsed.kind == "refusal")
     hallucinated = sum(1 for o in unanswerable if o.parsed.kind == "answer")
 
-    cited = valid = 0
+    cited = valid = valid_doc = 0
     for o in outcomes:
         if o.parsed.kind == "answer":
             chk = check_citations(o.parsed.text, set(o.retrieved_ids))
             cited += len(chk.cited)
             valid += len(chk.valid)
+            shown_docs = {_doc_of(r) for r in o.retrieved_ids}
+            valid_doc += sum(1 for c in chk.cited if _doc_of(c) in shown_docs)
 
     answered_answerable = [o for o in answerable if o.parsed.kind == "answer"]
     gold_hit = sum(
@@ -104,6 +109,7 @@ def score(outcomes: list[Outcome]) -> Scores:
         false_refusal_rate=_rate(false_refusals, len(answerable)),
         hallucination_rate=_rate(hallucinated, len(unanswerable)),
         citation_validity=_rate(valid, cited),
+        citation_validity_doc_level=_rate(valid_doc, cited),
         gold_citation_recall=_rate(gold_hit, len(answered_answerable)),
         malformed_rate=_rate(malformed, len(outcomes)),
     )

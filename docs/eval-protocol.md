@@ -28,7 +28,11 @@ Defined in `triagebox.metrics`; repeated here as the contract.
 | Gold citation recall | Answered answerable questions citing a gold document ÷ answered answerable |
 | Malformed rate | Replies not following the `ANSWER:` / `INSUFFICIENT_EVIDENCE` protocol ÷ all |
 
-Malformed replies are counted as neither answers nor refusals. Report them separately; a model that is "safe" only because it never follows the format has not shown anything.
+Malformed replies are counted as neither answers nor refusals. Report them separately; a model that is "safe" only because it never follows the format has not shown anything. A reply that is only citations, with no answer text, is malformed (the first prompt produced such replies for 12.5% of questions, and an earlier parser wrongly accepted them). `ANSWER: INSUFFICIENT_EVIDENCE` is read as a refusal.
+
+**Two levels of reporting.** *Model level* scores what the model said. *System level* scores what the system accepts after the citation policy, treating a rejected answer as a refusal. When well-formed replies always cite retrieved passages the two coincide, and the policy then provides no protection against an invented answer that cites a real passage.
+
+**Prompt and parser choices are made on the development split only.** Each change that alters a reported number is recorded with the numbers before and after.
 
 **Faithfulness beyond citation validity** is checked with a judge model on a sample, and a hand-checked subset of the judge's verdicts is reported with the agreement rate. Until then, only citation validity and the lexical-support proxy are available, and results say so.
 
@@ -41,6 +45,7 @@ Model family at two or more sizes; precision FP16, INT8, INT4 (INT8 and INT4 by 
 - Time to first token and decode rate from a streamed generation; energy per answer as measured average board power × duration, never an assumed power figure.
 - Each configuration is measured in several **interleaved rounds** on an otherwise idle machine, and compared within a round. A throttling GPU drifts during a run, and a single reading once misled a result in a sibling project.
 - Report medians with ranges, the number of rounds, the hardware, the software versions and the date.
+- **Timing validity rule.** GPU clock, temperature and throttle reasons are logged during every run. Speed and energy are reported only if the median SM clock stayed at or above 90% of its maximum and no power or thermal throttle reason was seen; otherwise the run is marked untrustworthy and its speed and energy figures are not quoted. On the development laptop a 7B model sustained for a few minutes drove the GPU to 89-97 C and a 210 MHz clock, so cooled bursts and sustained operation are reported separately.
 
 ## Reporting
 

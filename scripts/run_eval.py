@@ -30,7 +30,7 @@ from triagebox.dataset import load_corpus, load_items
 from triagebox.llamacpp import LlamaServer, TimedLLM
 from triagebox.metrics import Outcome, score
 from triagebox.pipeline import triage
-from triagebox.power import GpuPower
+from triagebox.power import GpuPower, THROTTLE_BITS, timing_trustworthy
 from triagebox.prompt import ParsedResponse
 from triagebox.rag import Bm25Index, chunk_text
 
@@ -57,6 +57,7 @@ def main() -> None:
     ap.add_argument("--n-per-kind", type=int, default=100)
     ap.add_argument("--k", type=int, default=4)
     ap.add_argument("--max-tokens", type=int, default=256)
+    ap.add_argument("--prompt-version", type=int, default=1, choices=[1, 2])
     ap.add_argument("--power", action="store_true", help="sample GPU power with nvidia-smi")
     args = ap.parse_args()
     if args.split == "test":
@@ -81,11 +82,12 @@ def main() -> None:
     model_out, system_out, rows = [], [], []
     ceiling_hits = 0
     power = GpuPower() if args.power else None
+    run_t0 = time.perf_counter()
     if power:
         power.__enter__()
     try:
         for n, item in enumerate(items, 1):
-            res = triage(item.question, index, llm, k=args.k, audit=audit, ts=datetime.now(timezone.utc).isoformat())
+            res = triage(item.question, index, llm, k=args.k, audit=audit, ts=datetime.now(timezone.utc).isoformat(), prompt_version=args.prompt_version)
             start, end, timing = llm.timings[-1]
             watts = power.mean_watts(start, end) if power else None
             joules = watts * timing.total_ms / 1000.0 if watts is not None else None
@@ -102,6 +104,7 @@ def main() -> None:
                     "kind": res.parsed.kind,
                     "accepted": res.accepted,
                     "reason": res.reason,
+                    "raw": audit.entries[-1]["event"]["raw_reply"],
                     "reply": res.parsed.text,
                     "citations": list(res.parsed.citations),
                     "retrieved": list(res.retrieved_ids),
@@ -119,6 +122,9 @@ def main() -> None:
         if power:
             power.__exit__(None, None, None)
 
+    run_t1 = time.perf_counter()
+    gpu = power.state(run_t0, run_t1) if power else None
+    trustworthy = timing_trustworthy(gpu) if gpu else None
     n_answerable = sum(i.answerable for i in items)
     summary = {
         "label": args.label,
@@ -126,9 +132,20 @@ def main() -> None:
         "n_answerable": n_answerable,
         "n_unanswerable": len(items) - n_answerable,
         "k": args.k,
+        "prompt_version": args.prompt_version,
         "retrieval_ceiling_answerable": ceiling_hits / n_answerable if n_answerable else None,
         "model_level": asdict(score(model_out)),
         "system_level": asdict(score(system_out)),
+        "gpu_state_during_run": None
+        if gpu is None
+        else {
+            "median_sm_mhz": gpu.median_sm_mhz,
+            "max_sm_mhz": gpu.max_sm_mhz,
+            "clock_fraction": gpu.clock_fraction,
+            "max_temp_c": gpu.max_temp_c,
+            "power_or_thermal_throttle_seen": bool(gpu.throttle_reasons_seen & THROTTLE_BITS),
+            "timing_trustworthy": trustworthy,
+        },
         "timing": {
             "ttft_ms_median": med([r["ttft_ms"] for r in rows]),
             "tokens_per_s_median": med([r["tokens_per_s"] for r in rows if r["tokens"] > 1]),
@@ -167,10 +184,17 @@ def main() -> None:
         s = summary[level]
         print(
             f"{level:13s} accuracy {pct(s['accuracy'])}  hallucination {pct(s['hallucination_rate'])}  "
-            f"false-refusal {pct(s['false_refusal_rate'])}  citation-validity {pct(s['citation_validity'])}  "
+            f"false-refusal {pct(s['false_refusal_rate'])}  citation-validity {pct(s['citation_validity'])} "
+            f"(paragraph-level {pct(s['citation_validity_doc_level'])})  "
             f"malformed {pct(s['malformed_rate'])}"
         )
     t = summary["timing"]
+    if gpu is not None:
+        print(
+            f"GPU during run: median SM clock {gpu.median_sm_mhz:.0f} of {gpu.max_sm_mhz} MHz ({100 * gpu.clock_fraction:.0f}%), "
+            f"max {gpu.max_temp_c} C, throttled: {bool(gpu.throttle_reasons_seen & THROTTLE_BITS)} -> "
+            f"timing {'TRUSTWORTHY' if trustworthy else 'NOT TRUSTWORTHY (speed/energy below reflect throttling)'}"
+        )
     print(f"timing: ttft {t['ttft_ms_median']:.0f} ms, {t['tokens_per_s_median'] or 0:.1f} tok/s, {t['tokens_median']:.0f} tokens/answer")
     if t["joules_per_answer_median"] is not None:
         print(f"energy: {t['joules_per_answer_median']:.1f} J/answer (GPU board power ~{t['gpu_watts_median']:.0f} W)")

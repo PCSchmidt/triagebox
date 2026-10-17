@@ -5,7 +5,14 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import pytest
 
 from triagebox.llamacpp import LlamaServer, TimedLLM
-from triagebox.power import PowerSample, mean_between, parse_power_line
+from triagebox.power import (
+    PowerSample,
+    mean_between,
+    parse_power_line,
+    parse_state_line,
+    state_between,
+    timing_trustworthy,
+)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -92,3 +99,34 @@ def test_mean_between_uses_window_then_falls_back_to_latest_before():
     assert mean_between(s, 4.0, 5.0) == 30.0  # nothing inside: latest before the end
     assert mean_between(s, 0.0, 0.5) is None  # nothing at or before
     assert mean_between([], 0.0, 1.0) is None
+
+
+def test_parse_state_line():
+    s = parse_state_line("92.5, 1785, 1785, 71, 0x0000000000000004", t=3.0)
+    assert (s.watts, s.sm_mhz, s.sm_max_mhz, s.temp_c, s.throttle_mask) == (92.5, 1785, 1785, 71, 0x4)
+    assert parse_state_line("[N/A], 1, 2, 3, 0x0", 0.0) is None
+    assert parse_state_line("1, 2, 3", 0.0) is None
+
+
+def state(sm, mask=0x1, temp=60, t=1.0):
+    return PowerSample(t, 80.0, sm, 1785, temp, mask)
+
+
+def test_full_speed_run_is_trustworthy():
+    st = state_between([state(1785, t=1.0), state(1770, t=2.0), state(1785, t=3.0)], 0.0, 4.0)
+    assert st.n_samples == 3 and st.clock_fraction > 0.99 and st.max_temp_c == 60
+    assert timing_trustworthy(st)  # "idle" (0x1) is not a throttle
+
+
+def test_low_clock_or_thermal_throttle_makes_timing_untrustworthy():
+    low = state_between([state(210, mask=0x20, temp=94, t=1.0), state(210, mask=0x40, temp=94, t=2.0)], 0.0, 3.0)
+    assert low.clock_fraction < 0.2 and low.throttle_reasons_seen == 0x60
+    assert not timing_trustworthy(low)
+    # Full clock but a power-cap reason was seen at some point: still flagged.
+    capped = state_between([state(1785, t=1.0), state(1785, mask=0x4, t=2.0)], 0.0, 3.0)
+    assert not timing_trustworthy(capped)
+
+
+def test_no_samples_is_untrustworthy():
+    assert not timing_trustworthy(state_between([], 0.0, 1.0))
+    assert not timing_trustworthy(state_between([state(1785, t=9.0)], 0.0, 1.0))

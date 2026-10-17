@@ -2,7 +2,8 @@
 
 The model must reply in one of two shapes:
 
-* ``ANSWER: <text>`` with every claim followed by a citation such as ``[doc1#3]``
+* ``ANSWER: <text>`` with every claim followed by a citation such as ``[doc1#3]``;
+  a reply that is only citations, with no answer text, is malformed
 * ``INSUFFICIENT_EVIDENCE`` (optionally followed by a short reason)
 
 Anything else is *malformed*. Fixing the protocol makes refusals and citations
@@ -20,16 +21,32 @@ ANSWER_TAG = "ANSWER:"
 REFUSE_TAG = "INSUFFICIENT_EVIDENCE"
 _CITATION = re.compile(r"\[([^\[\]\s]+)\]")
 
+PROMPT_VERSIONS = (1, 2)
 
-def build_prompt(question: str, chunks: list[Chunk]) -> str:
+
+def build_prompt(question: str, chunks: list[Chunk], version: int = 1) -> str:
+    """Prompt for ``question`` over ``chunks``. Version 2 adds an explicit format example."""
+    if version not in PROMPT_VERSIONS:
+        raise ValueError(f"unknown prompt version {version}")
     context = "\n\n".join(f"[{c.id}]\n{c.text}" for c in chunks) if chunks else "(no context retrieved)"
-    return (
-        "You answer questions using ONLY the context below. Do not use outside knowledge.\n"
-        f"If the context does not contain the answer, reply with exactly {REFUSE_TAG}.\n"
-        f"Otherwise reply starting with '{ANSWER_TAG}' and follow every claim with the id of the "
-        "supporting passage in square brackets, for example [doc1#3].\n\n"
-        f"CONTEXT:\n{context}\n\nQUESTION: {question}\n"
-    )
+    if version == 1:
+        head = (
+            "You answer questions using ONLY the context below. Do not use outside knowledge.\n"
+            f"If the context does not contain the answer, reply with exactly {REFUSE_TAG}.\n"
+            f"Otherwise reply starting with '{ANSWER_TAG}' and follow every claim with the id of the "
+            "supporting passage in square brackets, for example [doc1#3].\n\n"
+        )
+    else:
+        head = (
+            "You answer questions using ONLY the context below. Do not use outside knowledge.\n"
+            "Reply in exactly one of these two formats.\n"
+            f"1) If the context answers the question: '{ANSWER_TAG} <the answer, in a few words or one sentence> "
+            "[passage-id]'. "
+            f"For example: '{ANSWER_TAG} 1998 [doc1#3]'. The answer text comes first; the bracketed id only says "
+            "which passage supports it. Copy the id exactly as it appears in the context.\n"
+            f"2) If the context does not contain the answer: '{REFUSE_TAG}'.\n\n"
+        )
+    return f"{head}CONTEXT:\n{context}\n\nQUESTION: {question}\n"
 
 
 @dataclass(frozen=True)
@@ -51,6 +68,10 @@ def parse_response(raw: str) -> ParsedResponse:
     if s.startswith(ANSWER_TAG):
         body = s[len(ANSWER_TAG) :].strip()
         if not body:
+            return ParsedResponse("malformed", s)
+        if body.startswith(REFUSE_TAG):  # models sometimes write "ANSWER: INSUFFICIENT_EVIDENCE"
+            return ParsedResponse("refusal", body[len(REFUSE_TAG) :].strip(" :-\n"))
+        if not _CITATION.sub("", body).strip():  # only citations, no answer text
             return ParsedResponse("malformed", s)
         return ParsedResponse("answer", body, extract_citations(body))
     return ParsedResponse("malformed", s)

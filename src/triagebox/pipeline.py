@@ -25,7 +25,15 @@ class TriageResult:
     reason: str  # why it was accepted or rejected
 
 
-def triage(question: str, index: Bm25Index, llm: LLM, k: int = 4, audit: AuditLog | None = None, ts: str = "") -> TriageResult:
+def triage(
+    question: str,
+    index: Bm25Index,
+    llm: LLM,
+    k: int = 4,
+    audit: AuditLog | None = None,
+    ts: str = "",
+    prompt_version: int = 1,
+) -> TriageResult:
     """Answer ``question`` from the index, rejecting any answer that breaks the citation policy.
 
     Policy: an answer is accepted only if it cites at least one passage and every
@@ -35,7 +43,7 @@ def triage(question: str, index: Bm25Index, llm: LLM, k: int = 4, audit: AuditLo
     hits = index.search(question, k=k)
     chunks = [c for c, _ in hits]
     retrieved = tuple(c.id for c in chunks)
-    raw = llm.generate(build_prompt(question, chunks))
+    raw = llm.generate(build_prompt(question, chunks, prompt_version))
     parsed = parse_response(raw)
 
     check = None

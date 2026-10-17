@@ -108,3 +108,11 @@ def test_any_alternative_gold_answer_counts():
     assert s.accuracy == 1.0
     s = score([outcome(item, answer("It is Berlin [d1#0].", "d1#0"))])
     assert s.accuracy == 0.0
+
+
+def test_doc_level_validity_forgives_a_wrong_chunk_number_but_not_an_invented_source():
+    item = EvalItem("a", "q", True, ("d1",), "x")
+    # retrieved d1#0; cites d1#2 (right paragraph, wrong chunk) and zz#0 (invented)
+    s = score([outcome(item, answer("x [d1#2] and y [zz#0]", "d1#2", "zz#0"), retrieved=("d1#0",))])
+    assert s.citation_validity == 0.0
+    assert s.citation_validity_doc_level == 0.5

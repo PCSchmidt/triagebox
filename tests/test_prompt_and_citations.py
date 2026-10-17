@@ -64,3 +64,23 @@ def test_lexical_support_is_a_fraction_of_content_words():
     assert 0.0 < partial < 1.0
     assert lexical_support("Submarines surfaced", passage) == 0.0
     assert lexical_support("", passage) == 0.0
+
+
+def test_answer_tag_followed_by_the_refusal_token_is_a_refusal():
+    r = parse_response("ANSWER: INSUFFICIENT_EVIDENCE\n\nThe context does not say.")
+    assert r.kind == "refusal" and "context does not say" in r.text
+
+
+def test_a_reply_that_is_only_citations_is_malformed_not_an_answer():
+    assert parse_response("ANSWER: [d1#0]").kind == "malformed"
+    assert parse_response("ANSWER: [d1#0] [d2#1]").kind == "malformed"
+    assert parse_response("ANSWER: 1998 [d1#0]").kind == "answer"
+
+
+def test_prompt_versions():
+    chunks = [Chunk("d1#0", "d1", "text")]
+    v1, v2 = build_prompt("q", chunks), build_prompt("q", chunks, version=2)
+    assert "For example: 'ANSWER: 1998" in v2 and "For example: 'ANSWER: 1998" not in v1
+    assert "[d1#0]" in v1 and "[d1#0]" in v2 and "QUESTION: q" in v2
+    with pytest.raises(ValueError):
+        build_prompt("q", chunks, version=3)
