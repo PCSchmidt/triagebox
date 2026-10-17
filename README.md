@@ -74,7 +74,7 @@ What it shows, and what it doesn't:
 
 ## Planned measurements (not yet done)
 
-1. A second labeller, a judge from another model family, and a better unsupported-answer detector than word overlap (the lexical grounding policy removed only 2 of 14 such answers; see [faithfulness](docs/faithfulness.md)).
+1. A second labeller and a judge from another model family. A quote-then-verify check ([detector](docs/detector.md)) removes most unsupported answers (8 of 14 on the hand-labelled SQuAD run; 50-56% to 11% hallucination for the 1.5B models on the locked ISR test) but also loses about a fifth of correct answers, and is not yet in the pipeline.
 2. A prompt tuned for the small models, since the current prompt was tuned on the 7B model, and repeated runs to put error bars on the ladder.
 3. The final numbers on the locked test split, and an ISR-flavoured evaluation set over public documents ([protocol](docs/eval-protocol.md)).
 4. The same ladder on a Jetson Orin Nano once available, where energy per answer will not simply track latency.

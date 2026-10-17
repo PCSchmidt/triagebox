@@ -1,0 +1,124 @@
+{
+  "source": "isr",
+  "split": "dev",
+  "n": 230,
+  "supported": 196,
+  "unsupported": 34,
+  "auroc": {
+    "lexical_overlap": 0.6372298919567827,
+    "entity_coverage_only": 0.6101440576230492,
+    "quote_found": 0.8883553421368547,
+    "found_x_answer_coverage": 0.774984993997599,
+    "found_x_entity_coverage": 0.9030612244897959,
+    "found_x_min(answer,entity)": 0.7908163265306123,
+    "match_x_min(answer,entity)": 0.7959183673469388
+  },
+  "operating_points_lexical_overlap": [
+    {
+      "threshold": 0.3,
+      "supported_kept": 0.872,
+      "unsupported_removed": 0.265
+    },
+    {
+      "threshold": 0.5,
+      "supported_kept": 0.872,
+      "unsupported_removed": 0.294
+    },
+    {
+      "threshold": 0.7,
+      "supported_kept": 0.806,
+      "unsupported_removed": 0.353
+    },
+    {
+      "threshold": 0.9,
+      "supported_kept": 0.786,
+      "unsupported_removed": 0.5
+    },
+    {
+      "threshold": 1.0,
+      "supported_kept": 0.786,
+      "unsupported_removed": 0.5
+    }
+  ],
+  "operating_points_entity_coverage_only": [
+    {
+      "threshold": 0.3,
+      "supported_kept": 0.99,
+      "unsupported_removed": 0.176
+    },
+    {
+      "threshold": 0.5,
+      "supported_kept": 0.99,
+      "unsupported_removed": 0.176
+    },
+    {
+      "threshold": 0.7,
+      "supported_kept": 0.985,
+      "unsupported_removed": 0.235
+    },
+    {
+      "threshold": 0.9,
+      "supported_kept": 0.985,
+      "unsupported_removed": 0.235
+    },
+    {
+      "threshold": 1.0,
+      "supported_kept": 0.985,
+      "unsupported_removed": 0.235
+    }
+  ],
+  "operating_points_found_x_min(answer,entity)": [
+    {
+      "threshold": 0.3,
+      "supported_kept": 0.582,
+      "unsupported_removed": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "supported_kept": 0.561,
+      "unsupported_removed": 1.0
+    },
+    {
+      "threshold": 0.7,
+      "supported_kept": 0.51,
+      "unsupported_removed": 1.0
+    },
+    {
+      "threshold": 0.9,
+      "supported_kept": 0.505,
+      "unsupported_removed": 1.0
+    },
+    {
+      "threshold": 1.0,
+      "supported_kept": 0.505,
+      "unsupported_removed": 1.0
+    }
+  ],
+  "operating_points_match_x_min(answer,entity)": [
+    {
+      "threshold": 0.3,
+      "supported_kept": 0.592,
+      "unsupported_removed": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "supported_kept": 0.556,
+      "unsupported_removed": 1.0
+    },
+    {
+      "threshold": 0.7,
+      "supported_kept": 0.51,
+      "unsupported_removed": 1.0
+    },
+    {
+      "threshold": 0.9,
+      "supported_kept": 0.505,
+      "unsupported_removed": 1.0
+    },
+    {
+      "threshold": 1.0,
+      "supported_kept": 0.505,
+      "unsupported_removed": 1.0
+    }
+  ]
+}

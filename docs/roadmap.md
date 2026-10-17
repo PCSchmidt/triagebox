@@ -13,6 +13,7 @@
 | 0.7 | Energy per answer and the quality-versus-joules chart | Laptop GPU; wall-power meter for system energy | Done for GPU board energy on the laptop GPU; wall-power and edge-device measurements remain |
 | 0.7b | Prompt tuned for the 1.5B models; error bars on the ladder | Desktop GPU | Done on dev (see prompt-tuning.md): bootstrap intervals instead of repeats; prompt v3 fixes invented citations in 1.5B models, accuracy gain suggestive only |
 | 0.8 | Jetson Orin Nano measurements | Jetson | Planned |
+| 0.6b | Detector for unsupported answers (quote then verify) | Desktop GPU | Done (see detector.md): halves hallucination at about a fifth of correct answers lost; offline re-scoring only, not in the pipeline |
 | 0.9 | Disconnected-sync demo: signed bundles and diode between two instances | Laptop | Planned |
 | Later | LoRA or distilled small model compared against the quantised baseline | Desktop GPU | Planned |
 

@@ -1,0 +1,58 @@
+{
+  "isr-qwen2.5-1.5b-q8_0-p3_dev": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.8095238095238095,
+      "false_refusal_rate": 0.09523809523809523,
+      "hallucination_rate": 0.5789473684210527
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.6428571428571429,
+      "false_refusal_rate": 0.30952380952380953,
+      "hallucination_rate": 0.05263157894736842
+    }
+  ],
+  "isr-qwen2.5-1.5b-q4_k_m-p3_dev": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.6190476190476191,
+      "false_refusal_rate": 0.38095238095238093,
+      "hallucination_rate": 0.10526315789473684
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.5476190476190477,
+      "false_refusal_rate": 0.4523809523809524,
+      "hallucination_rate": 0.0
+    }
+  ],
+  "isr-qwen2.5-7b-q8_0-p2_dev": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.9047619047619048,
+      "false_refusal_rate": 0.07142857142857142,
+      "hallucination_rate": 0.05263157894736842
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.7142857142857143,
+      "false_refusal_rate": 0.2857142857142857,
+      "hallucination_rate": 0.0
+    }
+  ],
+  "isr-qwen2.5-7b-q4_k_m-p2_dev": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.9047619047619048,
+      "false_refusal_rate": 0.09523809523809523,
+      "hallucination_rate": 0.05263157894736842
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.7380952380952381,
+      "false_refusal_rate": 0.2619047619047619,
+      "hallucination_rate": 0.0
+    }
+  ]
+}

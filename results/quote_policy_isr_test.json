@@ -1,0 +1,72 @@
+{
+  "isr-qwen2.5-1.5b-fp16-p3_test": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.7619047619047619,
+      "false_refusal_rate": 0.11904761904761904,
+      "hallucination_rate": 0.5
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.5238095238095238,
+      "false_refusal_rate": 0.4523809523809524,
+      "hallucination_rate": 0.1111111111111111
+    }
+  ],
+  "isr-qwen2.5-1.5b-q8_0-p3_test": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.7380952380952381,
+      "false_refusal_rate": 0.14285714285714285,
+      "hallucination_rate": 0.5555555555555556
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.5238095238095238,
+      "false_refusal_rate": 0.4523809523809524,
+      "hallucination_rate": 0.1111111111111111
+    }
+  ],
+  "isr-qwen2.5-1.5b-q4_k_m-p3_test": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.5,
+      "false_refusal_rate": 0.38095238095238093,
+      "hallucination_rate": 0.2777777777777778
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.42857142857142855,
+      "false_refusal_rate": 0.5,
+      "hallucination_rate": 0.1111111111111111
+    }
+  ],
+  "isr-qwen2.5-7b-q8_0-p2_test": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.9047619047619048,
+      "false_refusal_rate": 0.07142857142857142,
+      "hallucination_rate": 0.1111111111111111
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.7619047619047619,
+      "false_refusal_rate": 0.21428571428571427,
+      "hallucination_rate": 0.1111111111111111
+    }
+  ],
+  "isr-qwen2.5-7b-q4_k_m-p2_test": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.9047619047619048,
+      "false_refusal_rate": 0.047619047619047616,
+      "hallucination_rate": 0.1111111111111111
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.7619047619047619,
+      "false_refusal_rate": 0.21428571428571427,
+      "hallucination_rate": 0.1111111111111111
+    }
+  ]
+}

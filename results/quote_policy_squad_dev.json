@@ -1,0 +1,74 @@
+{
+  "qwen2.5-1.5b-fp16-p3_dev": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.56,
+      "false_refusal_rate": 0.21,
+      "hallucination_rate": 0.59
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.31,
+      "false_refusal_rate": 0.59,
+      "hallucination_rate": 0.19
+    }
+  ],
+  "qwen2.5-1.5b-q8_0-p3_dev": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.58,
+      "false_refusal_rate": 0.19,
+      "hallucination_rate": 0.64
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.32,
+      "false_refusal_rate": 0.58,
+      "hallucination_rate": 0.19
+    }
+  ],
+  "qwen2.5-1.5b-q4_k_m-p3_dev": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.33,
+      "false_refusal_rate": 0.48,
+      "hallucination_rate": 0.31
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.19,
+      "false_refusal_rate": 0.66,
+      "hallucination_rate": 0.1
+    }
+  ],
+  "qwen2.5-7b-q8_0-p2_dev": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.74,
+      "false_refusal_rate": 0.15,
+      "hallucination_rate": 0.3
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.56,
+      "false_refusal_rate": 0.37,
+      "hallucination_rate": 0.18
+    }
+  ],
+  "qwen2.5-7b-q4_k_m-p2_dev": [
+    {
+      "quote_policy": false,
+      "accuracy": 0.74,
+      "false_refusal_rate": 0.14,
+      "hallucination_rate": 0.31
+    },
+    {
+      "quote_policy": true,
+      "accuracy": 0.56,
+      "false_refusal_rate": 0.35,
+      "hallucination_rate": 0.19,
+      "hand_unsupported_removed_of_14": 8,
+      "hand_supported_lost_of_17": 4
+    }
+  ]
+}
