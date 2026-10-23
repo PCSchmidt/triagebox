@@ -56,7 +56,14 @@ ISR **locked test split**, run once (42 answerable, 18 unanswerable):
 - **For the 1.5B models it is a bargain, in the sense that matters for safety.** On the locked test split it cut the share of unanswerable questions answered from 50-56% to 11%, at a cost of about 24 points of accuracy.
 - **For the 7B models on this set it only costs.** Hallucination did not move and accuracy fell 14 points. I read the 2 of 18 answers that remain. One is a real miss that shows the method's blind spot: asked "Who owned the trawler?" the model answered "Danish", and its quote ("The trawler is Danish-flagged...") is verbatim in the passage, but the quote does not answer the question (flag is not owner). The check verifies that the answer's words are in the passage, not that they answer the question asked. The other, "no code" for "What code did the helicopter squawk while hovering?", is arguably a correct answer to a false-premise question (the report says it squawked no code), so that label is debatable. On the harder SQuAD dev set it cut hallucination by about 12 points for an 18-point accuracy cost.
 - **A more extractive prompt (version 2, dev only)** gave back some accuracy (SQuAD 7B Q4_K_M 59% vs 56%) but removed fewer unsupported answers (6 of 14 vs 8), and the AUROC did not improve (0.71 vs 0.74 SQuAD, 0.89 vs 0.89 ISR). It is the same trade-off, not a better one, so version 1 stays.
-- **Not a free lunch in compute.** The check adds a second, longer model call per answer. Latency and energy of that call were not measured.
+- **Not a free lunch in compute: now measured.** The check is in the pipeline (`triage(..., quote_check=QuoteCheck(extractor))`; one extra extractor call for each answer that passed the citation policy). `scripts/quote_cost.py` ran the same 39 ISR dev questions (the first 20 answerable and all 19 unanswerable) once without and once with the check, per round, over three rounds, with the answerer and the Qwen2.5-7B Q8_0 extractor both loaded, on cool short bursts (GPU peak 68 to 76 C, no thermal or hardware throttling, board at its power limit as in the ladder):
+
+| Answerer | Time per question: citation policy only to with quote check | GPU energy per question | Extractor calls | Answers accepted (citation only to with check) |
+| --- | --- | --- | --- | --- |
+| Qwen2.5-1.5B Q8_0 | 138 to 391 ms (x2.8) | 14.2 to 42.1 J (x3.0) | 31 of 39 | 31 to 15 |
+| Qwen2.5-7B Q4_K_M | 281 to 536 ms (x1.9) | 30.9 to 60.3 J (x1.95) | 20 of 39 | 20 to 15 |
+
+  A small answerer pays proportionally more because a 7B model checks a 1.5B model's answers, so the check costs more than the answer it checks (about 250 ms and 28 J here). Medians over the three rounds; the rounds agreed within a few percent. GPU board power, not system power; a laptop GPU, not a Jetson; two models resident at once. Each question was asked once per burst, so these are costs per question over this set, not per accepted answer.
 
 ## Limits
 

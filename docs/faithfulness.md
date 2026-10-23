@@ -63,6 +63,21 @@ python scripts/judge_agreement.py --run qwen2.5-7b-q4_k_m-p2_dev         # agree
 
 Per-item verdicts are under `data/judge/` (untracked, they quote the benchmark).
 
+## A judge from a different model family
+
+Added 2026-10-23. The judge above is Qwen2.5-7B, the same family as the answerers, so it can share their blind spots. As a check I ran the same judging prompt with **Phi-3-mini-4k-instruct** (3.8B, 4-bit, MIT licence, Microsoft: a different family, trained on different data) over the same 116 accepted answers of the 7B Q4_K_M dev run and compared it with my hand labels (the same 43 labelled items) and with the deterministic gold-in-cited-passage check (85 answerable questions). It is a second *model* labeller, not a second person: there is still only one human labeller.
+
+| | Qwen2.5-7B Q8_0 judge | Phi-3-mini judge |
+| --- | --- | --- |
+| Agreement with my hand labels (43 items) | 72.1% | 69.8% |
+| Answers I labelled unsupported that it caught (of 19) | 15 | 6 |
+| Answers I labelled supported that it wrongly rejected (of 24) | 8 | 0 |
+| Agreement with "gold answer is in the cited passage" (85 answerable) | 89.4% | 97.6% |
+| Share of the 31 answered unanswerable questions it calls supported | 64.5% | 96.8% |
+| Share of the 85 answered answerable questions it calls supported | 85.9% | 94.1% |
+
+Same agreement, opposite errors: the Qwen judge is strict (it catches most unsupported answers and wrongly rejects a third of supported ones), the Phi-3 judge is lenient (it almost never rejects, so it misses 13 of 19 unsupported answers but also never wrongly rejects a supported one). Neither is a reliable screen on its own; the verbatim quote check ([detector.md](detector.md)) removes more unsupported answers (8 of 14) than either. A combination (reject only if both judges reject) would keep Phi-3's zero false rejections but could catch at most the 6 it catches; I did not test combinations. The 43 items are not a random sample (they are all answered unanswerable questions plus the judge's rejections of answerable ones), so the percentages describe this set, not a general rate.
+
 ## Not done
 
-Hand labels for the 73 answerable items the judge accepted (so false "supported" on answerable questions is only covered by the deterministic check); a second labeller; a judge from a different model family; the test split.
+Hand labels for the 73 answerable items the judge accepted (so false "supported" on answerable questions is only covered by the deterministic check); a second *human* labeller; combinations of judges; the test split. (A judge from a different model family is in the previous section.)

@@ -1,0 +1,28 @@
+{
+  "run": "qwen2.5-7b-q4_k_m-p2_dev",
+  "judge": "phi3",
+  "vs_hand_labels": {
+    "n": 43,
+    "agreement": 0.6976744186046512,
+    "judge_supported_hand_not": 13,
+    "judge_not_supported_hand_supported": 0,
+    "both_supported": 24,
+    "both_not_supported": 6,
+    "caveat": "43 items, not a random sample (all answered-unanswerable plus the judge's rejections of answerable ones); single labeller; 4 ambiguous items listed in hand_labels_dev.json"
+  },
+  "vs_gold_in_cited_passage_answerable": {
+    "n": 85,
+    "agreement": 0.9764705882352941,
+    "judge_supported_but_gold_absent_from_cited": 2,
+    "judge_rejected_but_gold_in_cited": 0,
+    "both_supported": 78,
+    "both_not": 5
+  },
+  "answered_unanswerable_by_hand": {
+    "n_answered": 31,
+    "passage_states_the_answer": 17,
+    "passage_does_not": 14
+  },
+  "answerable_answered_with_gold_absent_from_cited_passage": 7,
+  "answerable_answered_total": 85
+}

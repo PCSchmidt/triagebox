@@ -1,0 +1,209 @@
+{
+  "n_questions": 39,
+  "rounds": [
+    {
+      "answerer": "qwen2.5-1.5b-q8_0",
+      "round": 0,
+      "A_citation_only": {
+        "seconds": 5.601718700025231,
+        "ms_per_question": 143.63381282115975,
+        "joules_per_question": 14.225519431316506,
+        "answerer_calls": 39,
+        "extractor_calls": 0,
+        "extractor_tokens_median": null,
+        "accepted": 30,
+        "start_temp_c": 55,
+        "max_temp_c": 68,
+        "clock_fraction": 0.7899159663865546,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      },
+      "B_with_quote_check": {
+        "seconds": 15.770088199991733,
+        "ms_per_question": 404.36123589722393,
+        "joules_per_question": 44.024050586188906,
+        "answerer_calls": 39,
+        "extractor_calls": 31,
+        "extractor_tokens_median": 3,
+        "accepted": 15,
+        "start_temp_c": 55,
+        "max_temp_c": 73,
+        "clock_fraction": 0.6386554621848739,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      }
+    },
+    {
+      "answerer": "qwen2.5-1.5b-q8_0",
+      "round": 1,
+      "A_citation_only": {
+        "seconds": 5.308977100066841,
+        "ms_per_question": 136.1276179504318,
+        "joules_per_question": 14.213634940388175,
+        "answerer_calls": 39,
+        "extractor_calls": 0,
+        "extractor_tokens_median": null,
+        "accepted": 31,
+        "start_temp_c": 55,
+        "max_temp_c": 68,
+        "clock_fraction": 0.8403361344537815,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      },
+      "B_with_quote_check": {
+        "seconds": 14.942716599907726,
+        "ms_per_question": 383.1465794848135,
+        "joules_per_question": 41.42590658894874,
+        "answerer_calls": 39,
+        "extractor_calls": 31,
+        "extractor_tokens_median": 3,
+        "accepted": 15,
+        "start_temp_c": 55,
+        "max_temp_c": 73,
+        "clock_fraction": 0.6638655462184874,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      }
+    },
+    {
+      "answerer": "qwen2.5-1.5b-q8_0",
+      "round": 2,
+      "A_citation_only": {
+        "seconds": 5.386829699971713,
+        "ms_per_question": 138.12383846081315,
+        "joules_per_question": 14.089352119190776,
+        "answerer_calls": 39,
+        "extractor_calls": 0,
+        "extractor_tokens_median": null,
+        "accepted": 31,
+        "start_temp_c": 55,
+        "max_temp_c": 68,
+        "clock_fraction": 0.7983193277310925,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      },
+      "B_with_quote_check": {
+        "seconds": 15.268434799974784,
+        "ms_per_question": 391.49832820448165,
+        "joules_per_question": 42.13766881279507,
+        "answerer_calls": 39,
+        "extractor_calls": 31,
+        "extractor_tokens_median": 3,
+        "accepted": 15,
+        "start_temp_c": 55,
+        "max_temp_c": 72,
+        "clock_fraction": 0.6428571428571429,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      }
+    },
+    {
+      "answerer": "qwen2.5-7b-q4_k_m",
+      "round": 0,
+      "A_citation_only": {
+        "seconds": 12.42436559998896,
+        "ms_per_question": 318.5734769227938,
+        "joules_per_question": 35.61297989152153,
+        "answerer_calls": 39,
+        "extractor_calls": 0,
+        "extractor_tokens_median": null,
+        "accepted": 20,
+        "start_temp_c": 55,
+        "max_temp_c": 72,
+        "clock_fraction": 0.680672268907563,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      },
+      "B_with_quote_check": {
+        "seconds": 21.10702409991063,
+        "ms_per_question": 541.2057461515546,
+        "joules_per_question": 60.586199102141414,
+        "answerer_calls": 39,
+        "extractor_calls": 20,
+        "extractor_tokens_median": 19.0,
+        "accepted": 15,
+        "start_temp_c": 55,
+        "max_temp_c": 76,
+        "clock_fraction": 0.5546218487394958,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      }
+    },
+    {
+      "answerer": "qwen2.5-7b-q4_k_m",
+      "round": 1,
+      "A_citation_only": {
+        "seconds": 10.969272499904037,
+        "ms_per_question": 281.2633974334368,
+        "joules_per_question": 30.880058146007034,
+        "answerer_calls": 39,
+        "extractor_calls": 0,
+        "extractor_tokens_median": null,
+        "accepted": 20,
+        "start_temp_c": 55,
+        "max_temp_c": 71,
+        "clock_fraction": 0.5798319327731093,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      },
+      "B_with_quote_check": {
+        "seconds": 20.907624099985696,
+        "ms_per_question": 536.0929256406589,
+        "joules_per_question": 60.04103902694849,
+        "answerer_calls": 39,
+        "extractor_calls": 20,
+        "extractor_tokens_median": 19.0,
+        "accepted": 15,
+        "start_temp_c": 55,
+        "max_temp_c": 76,
+        "clock_fraction": 0.5798319327731093,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      }
+    },
+    {
+      "answerer": "qwen2.5-7b-q4_k_m",
+      "round": 2,
+      "A_citation_only": {
+        "seconds": 10.843199800001457,
+        "ms_per_question": 278.0307641026015,
+        "joules_per_question": 29.46006700013666,
+        "answerer_calls": 39,
+        "extractor_calls": 0,
+        "extractor_tokens_median": null,
+        "accepted": 20,
+        "start_temp_c": 55,
+        "max_temp_c": 71,
+        "clock_fraction": 0.5798319327731093,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      },
+      "B_with_quote_check": {
+        "seconds": 20.91979029995855,
+        "ms_per_question": 536.4048794861167,
+        "joules_per_question": 60.33856447982906,
+        "answerer_calls": 39,
+        "extractor_calls": 20,
+        "extractor_tokens_median": 19.0,
+        "accepted": 15,
+        "start_temp_c": 55,
+        "max_temp_c": 76,
+        "clock_fraction": 0.5882352941176471,
+        "power_capped": true,
+        "hard_throttle": false,
+        "trustworthy": true
+      }
+    }
+  ]
+}

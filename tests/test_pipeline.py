@@ -90,3 +90,46 @@ def test_grounding_policy_checks_the_cited_passage_not_just_any_retrieved_one():
     # "docked" appears only in port#0 (retrieved), but the answer cites air#0.
     r = run("ANSWER: The ship docked [air#0].", question="Where did the cargo ship dock at the airfield port?", min_support=0.8)
     assert not r.accepted
+
+
+# ---------------------------------------------------------------------------------------------- quote check
+from triagebox.pipeline import QuoteCheck  # noqa: E402
+
+GOOD = "ANSWER: Three trucks are near the airfield [air#0]."
+
+
+def test_quote_check_accepts_an_answer_the_extractor_can_quote():
+    ex = Scripted("Satellite imagery shows three trucks near the airfield.")
+    r = run(GOOD, quote_check=QuoteCheck(ex))
+    assert r.accepted and r.quote.startswith("Satellite imagery") and r.quote_match == 1.0
+    assert len(ex.prompts) == 1 and "Three trucks are near the airfield" in ex.prompts[0] and "[air#0]" in ex.prompts[0]
+    assert "[air#0]" not in ex.prompts[0].split("Answer given:")[1]  # the citation tag is stripped from the answer
+
+
+def test_quote_check_rejects_when_the_extractor_finds_no_supporting_sentence():
+    r = run(GOOD, quote_check=QuoteCheck(Scripted("NONE")))
+    assert not r.accepted and "copied verbatim" in r.reason and r.quote is None
+
+
+def test_quote_check_rejects_a_quote_that_is_not_in_the_passage():
+    r = run(GOOD, quote_check=QuoteCheck(Scripted("Three tanks were seen near the harbour at dawn.")))
+    assert not r.accepted and "not found verbatim" in r.reason and r.quote_match < 0.9
+
+
+def test_quote_check_is_not_asked_when_the_citation_policy_already_refused():
+    ex = Scripted("anything")
+    for reply in ("INSUFFICIENT_EVIDENCE", "ANSWER: Trucks [ghost#1].", "ANSWER: no citation here.", "garbled"):
+        assert not run(reply, quote_check=QuoteCheck(ex)).accepted
+    assert ex.prompts == []
+
+
+def test_quote_check_threshold_and_audit():
+    log = AuditLog()
+    ex = Scripted("Satellite imagery shows three trucks near the airfield.")
+    run(GOOD, audit=log, ts="t1", quote_check=QuoteCheck(ex))
+    assert log.entries[0]["event"]["quote_match"] == 1.0 and log.entries[0]["event"]["quote"].startswith("Satellite")
+    # a half-right quote passes a loose threshold and fails the default one
+    partial = Scripted("Satellite imagery shows three trucks near the harbour.")
+    assert not run(GOOD, quote_check=QuoteCheck(partial)).accepted
+    assert run(GOOD, quote_check=QuoteCheck(partial, threshold=0.8)).accepted
+    assert verify_chain(log.entries) is None

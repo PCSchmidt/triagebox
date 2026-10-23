@@ -1,0 +1,18 @@
+{
+  "run": "qwen2.5-7b-q4_k_m-p2_dev",
+  "judge": "Phi-3-mini-4k-instruct q4",
+  "n_judged": 116,
+  "answered_answerable": {
+    "n": 85,
+    "supported": 0.9411764705882353,
+    "not_supported": 0.058823529411764705,
+    "unparsed": 0.0
+  },
+  "answered_unanswerable": {
+    "n": 31,
+    "supported": 0.967741935483871,
+    "not_supported": 0.03225806451612903,
+    "unparsed": 0.0
+  },
+  "note": "judge verdicts only; agreement with hand labels is in judge_agreement_<run>.json"
+}

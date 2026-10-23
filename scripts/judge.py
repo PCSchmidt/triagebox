@@ -30,7 +30,10 @@ EXE = ROOT / "tools" / "llama-b11700" / "llama-server.exe"
 MODELS = {
     "q4_k_m": ROOT / "models" / "qwen2.5-7b-instruct" / "qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf",
     "q8_0": ROOT / "models" / "qwen2.5-7b-instruct" / "qwen2.5-7b-instruct-q8_0-00001-of-00003.gguf",
+    # a judge from a different model family (Microsoft Phi-3-mini 4k instruct, 3.8B, MIT licence, 4-bit)
+    "phi3": ROOT / "models" / "phi-3-mini" / "Phi-3-mini-4k-instruct-q4.gguf",
 }
+LABEL = {"q4_k_m": "Qwen2.5-7B-Instruct q4_k_m", "q8_0": "Qwen2.5-7B-Instruct q8_0", "phi3": "Phi-3-mini-4k-instruct q4"}
 
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -48,7 +51,7 @@ def main() -> None:
     }
     rows = [json.loads(l) for l in (ROOT / "data" / "runs" / f"{args.run}.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
     answered = [r for r in rows if r["kind"] == "answer" and r["accepted"]]
-    print(f"{len(answered)} accepted answers to judge with Qwen2.5-7B {args.judge}")
+    print(f"{len(answered)} accepted answers to judge with {LABEL[args.judge]}")
 
     out_rows = []
     with ServerProc(EXE, MODELS[args.judge], log=ROOT / "data" / "logs" / "judge_server.log") as s:
@@ -77,7 +80,7 @@ def main() -> None:
     u = [x for x in out_rows if not x["answerable"]]
     summary = {
         "run": args.run,
-        "judge": f"Qwen2.5-7B-Instruct {args.judge}",
+        "judge": LABEL[args.judge],
         "n_judged": len(out_rows),
         "answered_answerable": {"n": len(a), "supported": rate(a, "SUPPORTED"), "not_supported": rate(a, "NOT_SUPPORTED"), "unparsed": rate(a, "UNPARSED")},
         "answered_unanswerable": {"n": len(u), "supported": rate(u, "SUPPORTED"), "not_supported": rate(u, "NOT_SUPPORTED"), "unparsed": rate(u, "UNPARSED")},

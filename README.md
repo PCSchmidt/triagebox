@@ -74,7 +74,7 @@ What it shows, and what it doesn't:
 
 ## Planned measurements (not yet done)
 
-1. A second labeller and a judge from another model family. A quote-then-verify check ([detector](docs/detector.md)) removes most unsupported answers (8 of 14 on the hand-labelled SQuAD run; 50-56% to 11% hallucination for the 1.5B models on the locked ISR test) but also loses about a fifth of correct answers, and is not yet in the pipeline.
+1. A second *human* labeller. A judge from another model family (Phi-3-mini) now exists and agrees with my hand labels about as often as the Qwen judge (69.8% against 72.1%) with the opposite errors ([faithfulness](docs/faithfulness.md)). The quote-then-verify check ([detector](docs/detector.md)) is now an option in the pipeline (`triage(..., quote_check=...)`) and its cost is measured: it removes most unsupported answers (8 of 14 on the hand-labelled SQuAD run; 50-56% to 11% hallucination for the 1.5B models on the locked ISR test) but loses about a fifth of correct answers, and makes each question 1.9 to 2.8 times slower and 1.95 to 3.0 times more GPU energy on this laptop.
 2. A prompt tuned for the small models, since the current prompt was tuned on the 7B model, and repeated runs to put error bars on the ladder.
 3. The final numbers on the locked test split, and an ISR-flavoured evaluation set over public documents ([protocol](docs/eval-protocol.md)).
 4. The same ladder on a Jetson Orin Nano once available, where energy per answer will not simply track latency.
